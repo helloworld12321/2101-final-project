@@ -16,4 +16,7 @@ Group 5's final project for CSCI 2101: Data Structures, at UMM Morris 2019
 
 ------------
 
-Hooray! ♥️♠️♦️♣️
+Yay! ♥️♠️♦️♣️
+
+(For the record, I vote we don't do it graphically—that would be super hard.
+ –Joe)
