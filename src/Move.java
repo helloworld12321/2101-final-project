@@ -3,5 +3,13 @@
  */
 public class Move
 {
+  int getStart()
+  {
+    return 0;
+  }
 
+  int getDestination()
+  {
+    return 0;
+  }
 }

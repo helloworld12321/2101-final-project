@@ -16,6 +16,7 @@ public enum Suit
     this.symbol = symbol;
   }
 
+  @Override
   public String toString()
   {
     return Character.toString(symbol);

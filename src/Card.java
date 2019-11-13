@@ -7,4 +7,28 @@
  */
 public class Card
 {
+  int getRank()
+  {
+    return 0;
+  }
+
+  Suit getSuit()
+  {
+    return null;
+  }
+
+  boolean isShowing()
+  {
+    return false;
+  }
+
+  void setShowing(boolean shouldShow)
+  {
+  }
+
+  @Override
+  public String toString()
+  {
+    return null;
+  }
 }
