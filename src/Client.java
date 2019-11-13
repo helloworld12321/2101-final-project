@@ -1,5 +1,10 @@
 /**
- * The main class of this application.
+ * This is the main class of this application.
+ * 
+ * <p>
+ *   It's in charge of talking to the user, but it shouldn't handle gameplay
+ *   logic--that's {@code SolitaireGame}'s job.
+ * </p>
  */
 public class Client
 {
