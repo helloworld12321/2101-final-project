@@ -20,7 +20,7 @@ Yay! ♥️♠️♦️♣️
 
 (For the record, I vote we don't do it graphically—that would be super hard.
 
-(Here's)[https://cardgames.io/solitaire/] a ruleset we might want to use. It
+[Here's](https://cardgames.io/solitaire/) a ruleset we might want to use. It
 has the benefit that any move can be unambigiously specified using at most
 two pieces of information: the initial stack and the destination stack. In
 particular, I'd recommend using the variant where you move **3 cards** at a
