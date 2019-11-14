@@ -40,7 +40,7 @@ public class Client
   }
 
   /**
-   * Returns a string showing all the foundation piles (as they will be
+   * Returns a String showing all the foundation piles (as they will be
    * displayed to the user).
    *
    * <p>
@@ -48,24 +48,71 @@ public class Client
    *   the returned string will only have one line. This line should
    *   have exactly 23 characters.
    * </p>
-   *
    */
   private static String stringOfFoundations()
   {
-    List<String> strings = new ArrayList<>();
-    for (int i = 0; i < 3; i++)
+    List<String> cardStrings = new ArrayList<>();
+    for (int i = 0; i < 4; i++)
     {
       Stack<Card> foundation = game.getFoundation(i);
       if (foundation.empty())
       {
-        strings.add(String.format("[-%1s-]", suitsOfFoundations.get(i)));
+        cardStrings.add(String.format("[-%1s-]", suitsOfFoundations.get(i)));
       }
       else
       {
         Card topCard = foundation.peek();
-        strings.add(String.format("[%3s]", topCard));
+        cardStrings.add(String.format("[%3s]", topCard));
       }
     }
-    return String.join(" ", strings);
+    return String.join(" ", cardStrings);
+  }
+
+  /**
+   * Returns a String showing all the tableau piles (as they will be
+   * displayed to the user).
+   *
+   * <p>
+   *   The returned string should consist of several lines, each containing
+   *   exactly 41 characters.
+   * </p>
+   */
+  private static String stringOfTableaus()
+  {
+    List<Stack<Card>> tableaus = new ArrayList<>();
+    for (int i = 0; i < 7; i++)
+    {
+      // .clone() will only ever return Stack<Card>.
+      // This cast is only here to satisfy the compiler. (It doesn't need
+      // to be safe at runtime; it should never fail.)
+      @SuppressWarnings("unchecked")
+      Stack<Card> reversedTableau = (Stack<Card>)game.getTableau(i).clone();
+      tableaus.add(reversedTableau);
+    }
+
+    // We'll want to iterate through the tableaus from the back to the
+    // front. (So that the top items get displayed last.)
+    tableaus.forEach(Collections::reverse);
+
+    List<String> linesOfOutput = new ArrayList<>();
+    while (!tableaus.stream().allMatch(Stack::empty))
+    {
+      List<String> cardStrings = new ArrayList<>();
+      for (Stack<Card> tableau : tableaus)
+      {
+        if (tableau.empty())
+        {
+          // Five spaces
+          cardStrings.add("     ");
+        }
+        else
+        {
+          Card topCard = tableau.pop();
+          cardStrings.add(String.format("[%3s]", topCard));
+        }
+      }
+      linesOfOutput.add(String.join(" ", cardStrings));
+    }
+    return String.join("\n", linesOfOutput);
   }
 }
