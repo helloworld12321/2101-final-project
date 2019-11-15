@@ -31,7 +31,7 @@ public class Card
   {
     if (isShowing())
     {
-      return String.format("%d%s", getRank(), getSuit());
+      return String.format("%s%s", stringOfRank(), getSuit());
     }
     else
     {
@@ -40,6 +40,22 @@ public class Card
       // (For UI purposes, I'd prefer something three characters long or
       // less.)
       return "???";
+    }
+  }
+  
+  private String stringOfRank()
+  {
+    int rank = getRank();
+    switch (rank)
+    {
+      case 11:
+        return "J";
+      case 12:
+        return "Q";
+      case 13:
+        return "K";
+      default:
+        return Integer.toString(rank);
     }
   }
 }
