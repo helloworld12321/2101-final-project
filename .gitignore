@@ -1,0 +1,2 @@
+# We really don't need to sync the /out directory.
+/out/*
