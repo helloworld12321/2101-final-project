@@ -7,23 +7,32 @@
  */
 public class Card
 {
+  private int rank; 
+  private Suit suit;
+  private boolean showing = false;
+
+  public Card(int r, Suit s){
+    this.rank = r;
+    this.suit = s;
+  }
   int getRank()
   {
-    return 0;
+    return rank;
   }
 
   Suit getSuit()
   {
-    return null;
+    return suit;
   }
 
   boolean isShowing()
   {
-    return false;
+    return showing;
   }
 
   void setShowing(boolean shouldShow)
   {
+    showing = shouldShow;
   }
 
   @Override
@@ -35,11 +44,9 @@ public class Card
     }
     else
     {
-      // I'm not really sure what to print out for face-down playing cards.
-      // Here's a tentative idea.
-      // (For UI purposes, I'd prefer something three characters long or
-      // less.)
-      return "???";
+      //I think it would be good to use something that is 
+      //two characters just like the regular cards, such as -- or ??
+      return "??";
     }
   }
   
@@ -59,3 +66,4 @@ public class Card
     }
   }
 }
+
