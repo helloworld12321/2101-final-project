@@ -17,6 +17,15 @@ public class Card
     return null;
   }
 
+  /**
+   * Get the color of the card
+   * @return 0 for black, 1 for red
+   */
+  int getColor()
+  {
+    return 0;
+  }
+
   boolean isShowing()
   {
     return false;
