@@ -14,6 +14,7 @@ public class SolitaireGame
 {
 
   ArrayList<Stack<Card>> tableaus;
+  ArrayList<Stack<Card>> foundations;
   Queue<Card> stock;
   Deque<Card> waste;
   public SolitaireGame()
@@ -84,6 +85,13 @@ public class SolitaireGame
     }
 
     waste = new ConcurrentLinkedDeque<>();
+    //Create the foundations
+    foundations = new ArrayList<>();
+    for(int i = 0; i < 4; i++)
+    {
+      Stack<Card> currentFoundation = new Stack<>();
+      foundations.add(currentFoundation);
+    }
   }
 
   void makeMove(Move move) throws IllegalMoveException
@@ -113,7 +121,7 @@ public class SolitaireGame
 
   Stack<Card> getFoundation(int number)
   {
-    return null;
+    return foundations.get(number);
   }
 
   /**
@@ -161,15 +169,22 @@ public class SolitaireGame
       Card currentCard = tempStack.pop();
       end.add(currentCard);
     }
+
+    //If the top card isn't showing, show it
+    revealTopOfTableau(startTableau);
   }
 
   /**
    * Get the color that the next card on the tableau should be given its top card
    * @param topCard the current top card of the tableau, null means tableau is empty
-   * @return the color 0 for black, 1 for red
+   * @return the color 0 for black, 1 for red, 2 for any colored King
    */
   private int getTableauNextColor(Card topCard)
   {
+    //If the ending tableau is empty, we're looking for any colored king
+    if(topCard == null)
+      return 2;
+
     int color = topCard.getColor();
     int nextColor = -1;
 
@@ -188,6 +203,10 @@ public class SolitaireGame
    */
   private int getTableauNextRank(Card topCard) throws IllegalMoveException
   {
+    //If tableau is empty, we want a king
+    if(topCard == null)
+      return 13;
+
     int rank = topCard.getRank();
     int nextRank;
 
@@ -210,8 +229,14 @@ public class SolitaireGame
 
       boolean satisfiesColor = requiredColor == currentCard.getColor();
       boolean satisfiesRank = requiredRank == currentCard.getRank();
+      boolean faceUp = currentCard.isShowing();
 
-      if(satisfiesColor && satisfiesRank)
+      if(satisfiesColor && satisfiesRank && faceUp)
+      {
+        stoppingCard = currentCard;
+        break;
+      }
+      else if(satisfiesRank && faceUp && requiredColor == 2)
       {
         stoppingCard = currentCard;
         break;
@@ -266,4 +291,69 @@ public class SolitaireGame
       throw new IllegalMoveException("The waste card cannot be added to the tableau");
   }
 
+
+  public void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
+  {
+    Suit foundationSuit = null;
+    Stack<Card> foundation = getFoundation(foundationIndex);
+    Stack<Card> tableau = getTableau(tableauIndex);
+
+    if(tableau.isEmpty())
+      throw new IllegalMoveException("Can't move anything from an empty tableau");
+
+    //Figure out the suit of the foundation
+    switch(foundationIndex)
+    {
+      case 0:
+        foundationSuit = Suit.CLUBS;
+        break;
+      case 1:
+        foundationSuit = Suit.DIAMONDS;
+        break;
+      case 2:
+        foundationSuit = Suit.SPADES;
+        break;
+      case 3:
+        foundationSuit = Suit.HEARTS;
+        break;
+    }
+
+    //Get the rank that the next card on the foundation should be
+    int requiredRank;
+    //Note: if the foundation is empty, looking for an ace
+    if(!foundation.isEmpty())
+      requiredRank = foundation.peek().getRank() + 1;
+    else 
+      requiredRank = 1;
+
+    //Get the top card of the tableau
+    Card topCard = tableau.peek();
+
+    boolean satisfiesRank = topCard.getRank() == requiredRank;
+    boolean satisfiesSuit = topCard.getSuit().equals(foundationSuit);
+
+    if(satisfiesRank && satisfiesSuit)
+    {
+      topCard = tableau.pop();
+      foundation.add(topCard);
+    }
+    else
+    {
+      throw new IllegalMoveException("That card can't be added to this foundation");
+    }
+
+    //If the top card isn't showing, show it
+    revealTopOfTableau(tableauIndex);
+  }
+
+  private void revealTopOfTableau(int tableauIndex)
+  {
+    Stack<Card> tableau = getTableau(tableauIndex);
+    Card topCard = tableau.peek();
+
+    if(!topCard.isShowing())
+    {
+      topCard.setShowing(true);
+    }
+  }
 }
