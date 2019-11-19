@@ -13,6 +13,7 @@ public class SolitaireGame
 {
 
   ArrayList<Stack<Card>> tableaus;
+  ArrayList<Stack<Card>> foundations;
   Queue<Card> stock;
 
   public SolitaireGame()
@@ -81,7 +82,14 @@ public class SolitaireGame
       Card currentCard = allCards.remove(0);
       stock.add(currentCard);
     }
-    //TODO Fill both the tableaus and the stock
+
+    //Create the foundations
+    foundations = new ArrayList<>();
+    for(int i = 0; i < 4; i++)
+    {
+      Stack<Card> currentFoundation = new Stack<>();
+      foundations.add(currentFoundation);
+    }
   }
 
   void makeMove(Move move) throws IllegalMoveException
@@ -111,7 +119,7 @@ public class SolitaireGame
 
   Stack<Card> getFoundation(int number)
   {
-    return null;
+    return foundations.get(number);
   }
 
   /**
@@ -164,10 +172,14 @@ public class SolitaireGame
   /**
    * Get the color that the next card on the tableau should be given its top card
    * @param topCard the current top card of the tableau, null means tableau is empty
-   * @return the color 0 for black, 1 for red
+   * @return the color 0 for black, 1 for red, 2 for any colored King
    */
   private int getTableauNextColor(Card topCard)
   {
+    //If the ending tableau is empty, we're looking for any colored king
+    if(topCard == null)
+      return 2;
+
     int color = topCard.getColor();
     int nextColor = -1;
 
@@ -186,8 +198,12 @@ public class SolitaireGame
    */
   private int getTableauNextRank(Card topCard) throws IllegalMoveException
   {
+    //If tableau is empty, we want a king
+    if(topCard == null)
+      return 13;
+
     int rank = topCard.getRank();
-    int nextRank = -1;
+    int nextRank;
 
     if(rank == 1)
       throw new IllegalMoveException("Can't move to Tableau with Ace on top");
@@ -208,8 +224,14 @@ public class SolitaireGame
 
       boolean satisfiesColor = requiredColor == currentCard.getColor();
       boolean satisfiesRank = requiredRank == currentCard.getRank();
+      boolean faceUp = currentCard.isShowing();
 
-      if(satisfiesColor && satisfiesRank)
+      if(satisfiesColor && satisfiesRank && faceUp)
+      {
+        stoppingCard = currentCard;
+        break;
+      }
+      else if(satisfiesRank && faceUp && requiredColor == 2)
       {
         stoppingCard = currentCard;
         break;
