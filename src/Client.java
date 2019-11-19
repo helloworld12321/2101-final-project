@@ -39,6 +39,109 @@ public class Client
   }
   
   /**
+   * Ask the user for a move over the standard input.
+   *
+   * <p>
+   *   This method doesn't validate that the move is legal. It does, however,
+   *   make sure that the move is from a real, existing pile to a real,
+   *   existing pile.
+   * </p>
+   *
+   * <p>
+   *   For example, if the user types <pre>asdfkljasdlf</pre> for one of the
+   *   piles, this method will prompt them to enter something better.
+   * </p>
+   *
+   * <p>
+   *   This method prints a small, minimal prompt. If you want to give
+   *   the user a more detailed message, you should print that yourself
+   *   before calling {@code askForMove()}.
+   * </p>
+   *
+   * @return The move that the user provided.
+   */
+  private static Move askForMove()
+  {
+    Scanner sc = new Scanner(System.in);
+    
+    // Prompt the user.
+    System.out.print("Starting pile: ");
+
+    // Repeat until they give us a good input.
+    Move.PileType startType = null;
+    Integer startID = null;
+    do
+    {
+      String input = sc.nextLine().trim();
+      
+      if (input.length() != 1)
+      {
+        System.out.println("Please enter a single letter or number.");
+        continue;
+      }
+      
+      if (input.matches("\\d"))
+      {
+        int intInput = Integer.parseInt(input);
+        if (1 <= intInput && intInput <= 7)
+        {
+          startType = Move.PileType.TABLEAU;
+          startID = intInput - 1;
+        }
+        else if (intInput == 8)
+        {
+          startType = Move.PileType.STOCK;
+          startID = 0;
+        }
+        else if (intInput == 9)
+        {
+          startType = Move.PileType.WASTE;
+          startID = 0;
+        }
+        else
+        {
+          System.out.printf(
+              "%d isn't a valid pile; please try again.\n",
+              intInput);
+        }
+      }
+      else
+      {
+        switch (input.toUpperCase())
+        {
+          case "C":
+            startType = Move.PileType.FOUNDATION;
+            startID = 0;
+            break;
+            
+          case "D":
+            startType = Move.PileType.FOUNDATION;
+            startID = 1;
+            break;
+            
+          case "S":
+            startType = Move.PileType.FOUNDATION;
+            startID = 2;
+            break;
+            
+          case "H":
+            startType = Move.PileType.FOUNDATION;
+            startID = 3;
+            break;
+            
+          default:
+            System.out.printf(
+                "%s isn't a valid pile; please try again.\n",
+                input);
+        }
+      }
+    } while (startType == null && startID == null);
+    
+    // TODO
+    return null;
+  }
+  
+  /**
    * Returns a string showing the entire solitaire game--all the cards
    * in all the piles--as it will be displayed to the user.
    *
@@ -67,7 +170,7 @@ public class Client
   {
     StringBuilder everything = new StringBuilder();
   
-    // Print out the foundations in their own box on the top
+    // Print out the foundations in their own box on the top.
   
     String thirteenLeadingSpaces = "             ";
     
