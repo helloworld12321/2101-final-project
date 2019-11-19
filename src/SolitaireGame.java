@@ -167,6 +167,9 @@ public class SolitaireGame
       Card currentCard = tempStack.pop();
       end.add(currentCard);
     }
+
+    //If the top card isn't showing, show it
+    revealTopOfTableau(startTableau);
   }
 
   /**
@@ -243,5 +246,71 @@ public class SolitaireGame
       throw new IllegalMoveException("No viable cards found in first tableau");
 
     return stoppingCard;
+  }
+
+
+  public void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
+  {
+    Suit foundationSuit = null;
+    Stack<Card> foundation = getFoundation(foundationIndex);
+    Stack<Card> tableau = getTableau(tableauIndex);
+
+    if(tableau.isEmpty())
+      throw new IllegalMoveException("Can't move anything from an empty tableau");
+
+    //Figure out the suit of the foundation
+    switch(foundationIndex)
+    {
+      case 0:
+        foundationSuit = Suit.CLUBS;
+        break;
+      case 1:
+        foundationSuit = Suit.DIAMONDS;
+        break;
+      case 2:
+        foundationSuit = Suit.SPADES;
+        break;
+      case 3:
+        foundationSuit = Suit.HEARTS;
+        break;
+    }
+
+    //Get the rank that the next card on the foundation should be
+    int requiredRank;
+    //Note: if the foundation is empty, looking for an ace
+    if(!foundation.isEmpty())
+      requiredRank = foundation.peek().getRank() + 1;
+    else 
+      requiredRank = 1;
+
+    //Get the top card of the tableau
+    Card topCard = tableau.peek();
+
+    boolean satisfiesRank = topCard.getRank() == requiredRank;
+    boolean satisfiesSuit = topCard.getSuit().equals(foundationSuit);
+
+    if(satisfiesRank && satisfiesSuit)
+    {
+      topCard = tableau.pop();
+      foundation.add(topCard);
+    }
+    else
+    {
+      throw new IllegalMoveException("That card can't be added to this foundation");
+    }
+
+    //If the top card isn't showing, show it
+    revealTopOfTableau(tableauIndex);
+  }
+
+  private void revealTopOfTableau(int tableauIndex)
+  {
+    Stack<Card> tableau = getTableau(tableauIndex);
+    Card topCard = tableau.peek();
+
+    if(!topCard.isShowing())
+    {
+      topCard.setShowing(true);
+    }
   }
 }
