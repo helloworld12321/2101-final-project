@@ -1,6 +1,6 @@
 # 2101-final-project
 
-Group 5's final project for CSCI 2101: Data Structures, at UMM Morris 2019
+Group 5's final project for CSCI 2101: Data Structures, at UMN Morris 2019
 
 ## What we know so far
 
