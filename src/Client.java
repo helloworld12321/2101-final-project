@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.*;
 
 /**
@@ -41,7 +42,10 @@ public class Client
    * Returns a string showing the entire solitaire game--all the cards
    * in all the piles--as it will be displayed to the user.
    *
-   * For more information on
+   * <p>
+   *   For more information on Solitaire terminology, see
+   *   https://cardgames.io/solitaire/#rules
+   * </p>
    *
    * @param foundations A {@code List} of the foundations (of which there
    *   should be exactly 4.) This method will not mutate the foundations.
@@ -55,13 +59,82 @@ public class Client
    * @param waste The waste of the solitaire game (that is, the cards that the
    *   user has drawn from the stock.)
    */
-  private static void stringOfEverything(
+  private static String stringOfEverything(
       List<Stack<Card>> foundations,
       List<Stack<Card>> tableaus,
       Queue<Card> stock,
       Deque<Card> waste)
   {
-    // TODO
+    StringBuilder everything = new StringBuilder();
+    
+    String thirteenLeadingSpaces = "             ";
+    
+    String foundationsString =
+        thirteenLeadingSpaces + "  C     D     S     H  \n"
+        + thirteenLeadingSpaces + stringOfFoundations(foundations) + "\n";
+  
+    everything.append("═══════════════════════════════════════════════════\n");
+
+    everything.append(foundationsString);
+    
+    everything.append("══════╦════════════════════════════════════════════\n");
+    
+    String stringOfStock =
+        stock.isEmpty() ?
+            " --- " :
+            String.format("[%3s]", stock.element());
+    
+    String stringOfWaste =
+        waste.isEmpty() ?
+            " --- " :
+            String.format("[%3s]", waste.element());
+    
+    // Put the stock and waste on the left, and the tableaus on the right.
+    
+    String[] leftLines = {
+        "  8  ",
+        String.format("%5s", stringOfStock),
+        "  9  ",
+        String.format("%5s", stringOfWaste),
+    };
+    
+    String tableausString = stringOfTableaus(tableaus);
+    
+    String[] rightLines =
+        ("  1     2     3     4     5     6     7  \n"
+        + tableausString).split("\\n");
+    
+    if (leftLines.length < rightLines.length)
+    {
+      String[] newLeftLines = Arrays.copyOf(leftLines, rightLines.length);
+      for (int i = leftLines.length; i < rightLines.length; i++)
+      {
+        // five spaces
+        newLeftLines[i] = "     ";
+      }
+      leftLines = newLeftLines;
+    }
+    else
+    {
+      String[] newRightLines = Arrays.copyOf(rightLines, leftLines.length);
+      for (int i = rightLines.length; i < leftLines.length; i++)
+      {
+        // forty-one spaces.
+        newRightLines[i] = "                                         ";
+      }
+      rightLines = newRightLines;
+    }
+    
+    for (int i = 0; i < leftLines.length; i++)
+    {
+      everything
+          .append(leftLines[i])
+          .append(" ║ ")
+          .append(rightLines[i])
+          .append("\n");
+    }
+  
+    return everything.toString();
   }
 
   /**
@@ -187,8 +260,6 @@ public class Client
     {
       foundations.add(new Stack<>());
     }
-    System.out.println("--------");
-    System.out.println(stringOfFoundations(foundations));
   
   
     Card c1 = new Card(2, Suit.CLUBS);
@@ -204,21 +275,16 @@ public class Client
     c5.setShowing(true);
     c6.setShowing(true);
     foundations.get(0).push(c1);
-    foundations.get(2).push(c2);
     foundations.get(3).push(c3);
     foundations.get(3).push(c4);
     foundations.get(3).push(c5);
     foundations.get(3).push(c6);
-    System.out.println("--------");
-    System.out.println(stringOfFoundations(foundations));
     
     List<Stack<Card>> tableaus = new ArrayList<>();
     for (int i = 0; i < 7; i++)
     {
       tableaus.add(new Stack<>());
     }
-    System.out.println("--------");
-    System.out.println(stringOfTableaus(tableaus));
   
   
     tableaus.get(0).push(c1);
@@ -232,7 +298,11 @@ public class Client
     tableaus.get(5).push(c2);
     tableaus.get(5).push(c2);
     tableaus.get(5).push(c1);
-    System.out.println("--------");
-    System.out.println(stringOfTableaus(tableaus));
+    
+    Queue<Card> stock = new ConcurrentLinkedQueue<>();
+    
+    Deque<Card> waste = new ArrayDeque<>();
+    
+    System.out.println(stringOfEverything(foundations, tableaus, stock, waste));
   }
 }
