@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -14,7 +15,7 @@ public class SolitaireGame
 
   ArrayList<Stack<Card>> tableaus;
   Queue<Card> stock;
-
+  Deque<Card> waste;
   public SolitaireGame()
   {
     //ArrayList to hold all our cards and shuffle them
@@ -81,7 +82,8 @@ public class SolitaireGame
       Card currentCard = allCards.remove(0);
       stock.add(currentCard);
     }
-    //TODO Fill both the tableaus and the stock
+
+    waste = new ConcurrentLinkedDeque<>();
   }
 
   void makeMove(Move move) throws IllegalMoveException
@@ -106,7 +108,7 @@ public class SolitaireGame
 
   Deque<Card> getWaste()
   {
-    return null;
+    return waste;
   }
 
   Stack<Card> getFoundation(int number)
@@ -187,7 +189,7 @@ public class SolitaireGame
   private int getTableauNextRank(Card topCard) throws IllegalMoveException
   {
     int rank = topCard.getRank();
-    int nextRank = -1;
+    int nextRank;
 
     if(rank == 1)
       throw new IllegalMoveException("Can't move to Tableau with Ace on top");
@@ -222,4 +224,46 @@ public class SolitaireGame
 
     return stoppingCard;
   }
+
+  private void wastePileDraw() throws IllegalMoveException{
+      if (!stock.isEmpty()) {
+        waste.add(stock.poll());
+        waste.getLast().setShowing(true);
+      }
+      else if (stock.isEmpty()){
+        while(!waste.isEmpty())
+          stock.add(waste.poll());
+      }
+      else if (stock.isEmpty() && waste.isEmpty())
+        throw new IllegalMoveException("There are no cards left to draw from the waste or stock");
+  }
+
+  private void wasteToTableau(int endTableau) throws IllegalMoveException
+  {
+
+    //Get the tableau
+    Stack<Card> end = getTableau(endTableau);
+
+    //Set to null in case the destination is empty
+    Card endTopCard = null;
+
+    //If it's not empty, get the top card
+    if(!end.isEmpty())
+      endTopCard = end.peek();
+
+    //Find the color and rank that the next card should be
+    int requiredColor = getTableauNextColor(endTopCard);
+    int requiredRank = getTableauNextRank(endTopCard);
+
+    //If waste is empty, move is illegal
+    if(waste.isEmpty())
+      throw new IllegalMoveException("Can't move cards from an empty waste");
+
+    //If the card is the correct one adds it to the tableau
+    if((waste.peek().getRank() == requiredRank) && (waste.peek().getColor() == requiredColor))
+      end.add(waste.pop());
+    else
+      throw new IllegalMoveException("The waste card cannot be added to the tableau");
+  }
+
 }
