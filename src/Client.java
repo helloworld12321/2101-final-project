@@ -66,7 +66,9 @@ public class Client
       Deque<Card> waste)
   {
     StringBuilder everything = new StringBuilder();
-    
+  
+    // Print out the foundations in their own box on the top
+  
     String thirteenLeadingSpaces = "             ";
     
     String foundationsString =
@@ -78,7 +80,9 @@ public class Client
     everything.append(foundationsString);
     
     everything.append("══════╦════════════════════════════════════════════\n");
-    
+  
+    // Put the stock and waste on the left, and the tableaus on the right.
+  
     String stringOfStock =
         stock.isEmpty() ?
             " --- " :
@@ -88,8 +92,6 @@ public class Client
         waste.isEmpty() ?
             " --- " :
             String.format("[%3s]", waste.element());
-    
-    // Put the stock and waste on the left, and the tableaus on the right.
     
     String[] leftLines = {
         "  8  ",
@@ -104,12 +106,15 @@ public class Client
         ("  1     2     3     4     5     6     7  \n"
         + tableausString).split("\\n");
     
+    // Pad the lines on the left and the lines on the right, so that
+    // there are the same number of lines in each.
+    
     if (leftLines.length < rightLines.length)
     {
       String[] newLeftLines = Arrays.copyOf(leftLines, rightLines.length);
       for (int i = leftLines.length; i < rightLines.length; i++)
       {
-        // five spaces
+        // five spaces.
         newLeftLines[i] = "     ";
       }
       leftLines = newLeftLines;
