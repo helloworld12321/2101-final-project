@@ -85,6 +85,8 @@ public class Card
     int rank = getRank();
     switch (rank)
     {
+      case 1:
+        return "A";
       case 11:
         return "J";
       case 12:

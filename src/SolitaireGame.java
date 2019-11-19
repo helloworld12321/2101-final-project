@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * This class is in charge of running the game of solitaire.
@@ -12,19 +13,75 @@ public class SolitaireGame
 {
 
   ArrayList<Stack<Card>> tableaus;
+  Queue<Card> stock;
 
   public SolitaireGame()
   {
-    //Initialize the list of tableaus and fill it with stacks
+    //ArrayList to hold all our cards and shuffle them
+    ArrayList<Card> allCards = new ArrayList<>();
+
+    //Create the cards and fill the array list
+    for(int i = 0; i < 4; i++)
+    {
+      Suit currentSuit = null;
+      switch(i)
+      {
+        case 0:
+          currentSuit = Suit.CLUBS;
+          break;
+        case 1:
+          currentSuit = Suit.SPADES;
+          break;
+        case 2:
+          currentSuit = Suit.DIAMONDS;
+          break;
+        case 3:
+          currentSuit = Suit.HEARTS;
+          break;
+      }
+
+      for(int j = 0; j < 13; j++)
+      {
+        int currentRank = j + 1;
+        Card currentCard = new Card(currentRank, currentSuit);
+        allCards.add(currentCard);
+      }
+    }
+
+    //Shuffle all the cards
+    Collections.shuffle(allCards);
+
+    //Initialize the list of tableaus
     tableaus = new ArrayList<>();
 
     for(int i = 0; i < 7; i++)
     {
+      //Create the tableau
       Stack<Card> currentTableau = new Stack<>();
+
+      //Fill the tableau with cards from the shuffled arraylist
+      for(int j = 0; j <= i; j++)
+      {
+        int lastIndex = allCards.size() - 1;
+        Card currentCard = allCards.remove(lastIndex);
+        currentTableau.add(currentCard);
+      }
+
+      //Show the top card
+      currentTableau.peek().setShowing(true);
+
+      //Add to the list of tableaus
       tableaus.add(currentTableau);
     }
 
-    //TODO Shuffle the cards and fill both the tableaus and the stack
+    stock = new ConcurrentLinkedQueue<>();
+
+    while(!allCards.isEmpty())
+    {
+      Card currentCard = allCards.remove(0);
+      stock.add(currentCard);
+    }
+    //TODO Fill both the tableaus and the stock
   }
 
   void makeMove(Move move) throws IllegalMoveException
@@ -44,7 +101,7 @@ public class SolitaireGame
 
   Queue<Card> getStock()
   {
-    return null;
+    return stock;
   }
 
   Deque<Card> getWaste()
