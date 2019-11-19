@@ -42,7 +42,7 @@ public class SolitaireGame
     return tableaus.get(number);
   }
 
-  Queue<Card> getStack()
+  Queue<Card> getStock()
   {
     return null;
   }
