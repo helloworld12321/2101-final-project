@@ -19,7 +19,7 @@ public class SolitaireGame
     return null;
   }
 
-  Queue<Card> getStack()
+  Queue<Card> getStock()
   {
     return null;
   }
