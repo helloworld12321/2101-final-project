@@ -35,7 +35,10 @@ public class Card
    */
   int getColor()
   {
-    return 0;
+    if(getSuit().equals(Suit.CLUBS) || getSuit().equals(Suit.SPADES))
+      return 0;
+    else
+      return 1;
   }
 
   //Returns if the card is flipped over or not

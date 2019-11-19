@@ -97,7 +97,7 @@ public class SolitaireGame
     end.add(start.pop());
 
     //Move the other cards into the ending tableau
-    for(int i = 0; i < tempStack.size(); i++)
+    while(!tempStack.isEmpty())
     {
       Card currentCard = tempStack.pop();
       end.add(currentCard);
@@ -149,7 +149,7 @@ public class SolitaireGame
     {
       currentCard = tableau.get(i);
 
-      boolean satisfiesColor = requiredColor == currentCard.getColor;
+      boolean satisfiesColor = requiredColor == currentCard.getColor();
       boolean satisfiesRank = requiredRank == currentCard.getRank();
 
       if(satisfiesColor && satisfiesRank)
