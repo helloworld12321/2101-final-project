@@ -131,6 +131,6 @@ class Move
   
   enum PileType
   {
-    TABLEAU, FOUNDATION, STACK, WASTE
+    TABLEAU, FOUNDATION, STOCK, WASTE
   }
 }
