@@ -261,48 +261,20 @@ public class Client
       foundations.add(new Stack<>());
     }
   
-  
-    Card c1 = new Card(2, Suit.CLUBS);
-    Card c2 = new Card(4, Suit.HEARTS);
-    Card c5 = new Card(13, Suit.SPADES);
-    Card c4 = new Card(12, Suit.HEARTS);
-    Card c3 = new Card(11, Suit.CLUBS);
-    Card c6 = new Card(10, Suit.HEARTS);
-    c1.setShowing(true);
-    c2.setShowing(false);
-    c3.setShowing(true);
-    c4.setShowing(true);
-    c5.setShowing(true);
-    c6.setShowing(true);
-    foundations.get(0).push(c1);
-    foundations.get(3).push(c3);
-    foundations.get(3).push(c4);
-    foundations.get(3).push(c5);
-    foundations.get(3).push(c6);
-    
     List<Stack<Card>> tableaus = new ArrayList<>();
     for (int i = 0; i < 7; i++)
     {
-      tableaus.add(new Stack<>());
+      tableaus.add(game.getTableau(i));
     }
   
-  
-    tableaus.get(0).push(c1);
-    tableaus.get(2).push(c2);
-    tableaus.get(3).push(c3);
-    tableaus.get(3).push(c4);
-    tableaus.get(3).push(c5);
-    tableaus.get(3).push(c6);
-    tableaus.get(5).push(c2);
-    tableaus.get(5).push(c2);
-    tableaus.get(5).push(c2);
-    tableaus.get(5).push(c2);
-    tableaus.get(5).push(c1);
-    
     Queue<Card> stock = new ConcurrentLinkedQueue<>();
     
     Deque<Card> waste = new ArrayDeque<>();
     
-    System.out.println(stringOfEverything(foundations, tableaus, stock, waste));
+    System.out.println(stringOfEverything(
+        foundations,
+        tableaus,
+        stock,
+        waste));
   }
 }
