@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -13,8 +14,9 @@ public class SolitaireGame
 {
 
   ArrayList<Stack<Card>> tableaus;
+  ArrayList<Stack<Card>> foundations;
   Queue<Card> stock;
-
+  Deque<Card> waste;
   public SolitaireGame()
   {
     //ArrayList to hold all our cards and shuffle them
@@ -81,7 +83,15 @@ public class SolitaireGame
       Card currentCard = allCards.remove(0);
       stock.add(currentCard);
     }
-    //TODO Fill both the tableaus and the stock
+
+    waste = new ConcurrentLinkedDeque<>();
+    //Create the foundations
+    foundations = new ArrayList<>();
+    for(int i = 0; i < 4; i++)
+    {
+      Stack<Card> currentFoundation = new Stack<>();
+      foundations.add(currentFoundation);
+    }
   }
 
   void makeMove(Move move) throws IllegalMoveException
@@ -106,12 +116,12 @@ public class SolitaireGame
 
   Deque<Card> getWaste()
   {
-    return null;
+    return waste;
   }
 
   Stack<Card> getFoundation(int number)
   {
-    return null;
+    return foundations.get(number);
   }
 
   /**
@@ -159,15 +169,22 @@ public class SolitaireGame
       Card currentCard = tempStack.pop();
       end.add(currentCard);
     }
+
+    //If the top card isn't showing, show it
+    revealTopOfTableau(startTableau);
   }
 
   /**
    * Get the color that the next card on the tableau should be given its top card
    * @param topCard the current top card of the tableau, null means tableau is empty
-   * @return the color 0 for black, 1 for red
+   * @return the color 0 for black, 1 for red, 2 for any colored King
    */
   private int getTableauNextColor(Card topCard)
   {
+    //If the ending tableau is empty, we're looking for any colored king
+    if(topCard == null)
+      return 2;
+
     int color = topCard.getColor();
     int nextColor = -1;
 
@@ -186,8 +203,12 @@ public class SolitaireGame
    */
   private int getTableauNextRank(Card topCard) throws IllegalMoveException
   {
+    //If tableau is empty, we want a king
+    if(topCard == null)
+      return 13;
+
     int rank = topCard.getRank();
-    int nextRank = -1;
+    int nextRank;
 
     if(rank == 1)
       throw new IllegalMoveException("Can't move to Tableau with Ace on top");
@@ -208,8 +229,14 @@ public class SolitaireGame
 
       boolean satisfiesColor = requiredColor == currentCard.getColor();
       boolean satisfiesRank = requiredRank == currentCard.getRank();
+      boolean faceUp = currentCard.isShowing();
 
-      if(satisfiesColor && satisfiesRank)
+      if(satisfiesColor && satisfiesRank && faceUp)
+      {
+        stoppingCard = currentCard;
+        break;
+      }
+      else if(satisfiesRank && faceUp && requiredColor == 2)
       {
         stoppingCard = currentCard;
         break;
@@ -221,5 +248,112 @@ public class SolitaireGame
       throw new IllegalMoveException("No viable cards found in first tableau");
 
     return stoppingCard;
+  }
+
+  private void wastePileDraw() throws IllegalMoveException{
+      if (!stock.isEmpty()) {
+        waste.add(stock.poll());
+        waste.getLast().setShowing(true);
+      }
+      else if (stock.isEmpty()){
+        while(!waste.isEmpty())
+          stock.add(waste.poll());
+      }
+      else if (stock.isEmpty() && waste.isEmpty())
+        throw new IllegalMoveException("There are no cards left to draw from the waste or stock");
+  }
+
+  private void wasteToTableau(int endTableau) throws IllegalMoveException
+  {
+
+    //Get the tableau
+    Stack<Card> end = getTableau(endTableau);
+
+    //Set to null in case the destination is empty
+    Card endTopCard = null;
+
+    //If it's not empty, get the top card
+    if(!end.isEmpty())
+      endTopCard = end.peek();
+
+    //Find the color and rank that the next card should be
+    int requiredColor = getTableauNextColor(endTopCard);
+    int requiredRank = getTableauNextRank(endTopCard);
+
+    //If waste is empty, move is illegal
+    if(waste.isEmpty())
+      throw new IllegalMoveException("Can't move cards from an empty waste");
+
+    //If the card is the correct one adds it to the tableau
+    if((waste.peek().getRank() == requiredRank) && (waste.peek().getColor() == requiredColor))
+      end.add(waste.pop());
+    else
+      throw new IllegalMoveException("The waste card cannot be added to the tableau");
+  }
+
+
+  public void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
+  {
+    Suit foundationSuit = null;
+    Stack<Card> foundation = getFoundation(foundationIndex);
+    Stack<Card> tableau = getTableau(tableauIndex);
+
+    if(tableau.isEmpty())
+      throw new IllegalMoveException("Can't move anything from an empty tableau");
+
+    //Figure out the suit of the foundation
+    switch(foundationIndex)
+    {
+      case 0:
+        foundationSuit = Suit.CLUBS;
+        break;
+      case 1:
+        foundationSuit = Suit.DIAMONDS;
+        break;
+      case 2:
+        foundationSuit = Suit.SPADES;
+        break;
+      case 3:
+        foundationSuit = Suit.HEARTS;
+        break;
+    }
+
+    //Get the rank that the next card on the foundation should be
+    int requiredRank;
+    //Note: if the foundation is empty, looking for an ace
+    if(!foundation.isEmpty())
+      requiredRank = foundation.peek().getRank() + 1;
+    else 
+      requiredRank = 1;
+
+    //Get the top card of the tableau
+    Card topCard = tableau.peek();
+
+    boolean satisfiesRank = topCard.getRank() == requiredRank;
+    boolean satisfiesSuit = topCard.getSuit().equals(foundationSuit);
+
+    if(satisfiesRank && satisfiesSuit)
+    {
+      topCard = tableau.pop();
+      foundation.add(topCard);
+    }
+    else
+    {
+      throw new IllegalMoveException("That card can't be added to this foundation");
+    }
+
+    //If the top card isn't showing, show it
+    revealTopOfTableau(tableauIndex);
+  }
+
+  private void revealTopOfTableau(int tableauIndex)
+  {
+    Stack<Card> tableau = getTableau(tableauIndex);
+    Card topCard = tableau.peek();
+
+    if(!topCard.isShowing())
+    {
+      topCard.setShowing(true);
+    }
   }
 }
