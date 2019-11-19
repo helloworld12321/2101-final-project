@@ -36,8 +36,31 @@ public class Client
     // TESTING
     test();
   }
-
-  private static void displayEverything()
+  
+  /**
+   * Returns a string showing the entire solitaire game--all the cards
+   * in all the piles--as it will be displayed to the user.
+   *
+   * For more information on
+   *
+   * @param foundations A {@code List} of the foundations (of which there
+   *   should be exactly 4.) This method will not mutate the foundations.
+   *
+   * @param tableaus A {@code List} of the tableaus (of which there
+   *   should be exactly 7.) This method will not mutate the tableaus.
+   *
+   * @param stack The stack of the solitaire game (that is, the pile
+   *   of face-down cards the user draws from). This is not actually a
+   *   stack in the data-structures sense of the term--it's really a queue.
+   *
+   * @param waste The waste of the solitaire game (that is, the cards that the
+   *   user has drawn from the stack.)
+   */
+  private static void stringOfEverything(
+      List<Stack<Card>> foundations,
+      List<Stack<Card>> tableaus,
+      Queue<Card> stack,
+      Deque<Card> waste)
   {
     // TODO
   }
