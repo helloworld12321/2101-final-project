@@ -32,7 +32,9 @@ public class Client
     System.out.println("Welcome to Solitaire!");
 
     game = new SolitaireGame();
-    // TODO
+    
+    // TESTING
+    test();
   }
 
   private static void displayEverything()
@@ -146,5 +148,69 @@ public class Client
       linesOfOutput.add(String.join(" ", cardStrings));
     }
     return String.join("\n", linesOfOutput);
+  }
+  
+  /**
+   * Test some of the methods in this class.
+   *
+   * <p>
+   *   This method is for development/debugging use only--it should be unused
+   *   (or removed completely) by the time the project is finished.
+   * </p>
+   */
+  private static void test()
+  {
+    List<Stack<Card>> foundations = new ArrayList<>();
+    for (int i = 0; i < 4; i++)
+    {
+      foundations.add(new Stack<>());
+    }
+    System.out.println("--------");
+    System.out.println(stringOfFoundations(foundations));
+  
+  
+    Card c1 = new Card(2, Suit.CLUBS);
+    Card c2 = new Card(4, Suit.HEARTS);
+    Card c5 = new Card(13, Suit.SPADES);
+    Card c4 = new Card(12, Suit.HEARTS);
+    Card c3 = new Card(11, Suit.CLUBS);
+    Card c6 = new Card(10, Suit.HEARTS);
+    c1.setShowing(true);
+    c2.setShowing(false);
+    c3.setShowing(true);
+    c4.setShowing(true);
+    c5.setShowing(true);
+    c6.setShowing(true);
+    foundations.get(0).push(c1);
+    foundations.get(2).push(c2);
+    foundations.get(3).push(c3);
+    foundations.get(3).push(c4);
+    foundations.get(3).push(c5);
+    foundations.get(3).push(c6);
+    System.out.println("--------");
+    System.out.println(stringOfFoundations(foundations));
+    
+    List<Stack<Card>> tableaus = new ArrayList<>();
+    for (int i = 0; i < 7; i++)
+    {
+      tableaus.add(new Stack<>());
+    }
+    System.out.println("--------");
+    System.out.println(stringOfTableaus(tableaus));
+  
+  
+    tableaus.get(0).push(c1);
+    tableaus.get(2).push(c2);
+    tableaus.get(3).push(c3);
+    tableaus.get(3).push(c4);
+    tableaus.get(3).push(c5);
+    tableaus.get(3).push(c6);
+    tableaus.get(5).push(c2);
+    tableaus.get(5).push(c2);
+    tableaus.get(5).push(c2);
+    tableaus.get(5).push(c2);
+    tableaus.get(5).push(c1);
+    System.out.println("--------");
+    System.out.println(stringOfTableaus(tableaus));
   }
 }
