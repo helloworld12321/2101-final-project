@@ -35,7 +35,7 @@ public class Client
     List<Stack<Card>> foundations = new ArrayList<>();
     for (int i = 0; i < 4; i++)
     {
-      foundations.add(new Stack<>());
+      foundations.add(game.getFoundation(i));
     }
   
     List<Stack<Card>> tableaus = new ArrayList<>();
@@ -46,7 +46,7 @@ public class Client
   
     Queue<Card> stock = game.getStock();
   
-    Deque<Card> waste = new ArrayDeque<>();
+    Deque<Card> waste = game.getWaste();
   
     System.out.println(GamePrinter.stringOfEverything(
         foundations,
