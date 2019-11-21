@@ -18,19 +18,42 @@ public class Client
 
     game = new SolitaireGame();
     
-    // TESTING
-    test();
+    // TODO: Add check for is-the-game-finished.
+    while (true)
+    {
+      printGameState();
+      System.out.println("Please enter a move.");
+      boolean haveTheyEnteredALegalMove;
+      do
+      {
+        Move move = InputGetter.askForMove();
+        try
+        {
+          game.makeMove(move);
+
+          // If we reach this line, makeMove didn't throw,
+          // and the move the user entered was legal.
+          haveTheyEnteredALegalMove = true;
+        }
+        catch (IllegalMoveException e)
+        {
+          haveTheyEnteredALegalMove = false;
+          System.out.printf("That move isn't legal: %s\n", e.getMessage());
+          System.out.println("Please enter another move.");
+        }
+      } while (!haveTheyEnteredALegalMove);
+    }
   }
 
   /**
-   * Test some of the methods in this class.
+   * Display the state of the game on the standard output.
    *
    * <p>
-   *   This method is for development/debugging use only--it should be unused
-   *   (or removed completely) by the time the project is finished.
+   *   This method prints all of the cards on the table in a pretty, human-
+   *   readable format.
    * </p>
    */
-  private static void test()
+  private static void printGameState()
   {
     List<Stack<Card>> foundations = new ArrayList<>();
     for (int i = 0; i < 4; i++)

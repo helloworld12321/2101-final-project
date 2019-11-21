@@ -34,7 +34,7 @@ class InputGetter
   static Move askForMove()
   {
     PileTypeAndID start = askForPile("Starting pile: ");
-    PileTypeAndID destination = askForPile("Destination pile:");
+    PileTypeAndID destination = askForPile("Destination pile: ");
 
     return new Move(
         start.getPileType(),
