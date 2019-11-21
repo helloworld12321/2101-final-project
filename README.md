@@ -5,13 +5,12 @@ Group 5's final project for CSCI 2101: Data Structures, at UMN Morris 2019
 ## What we know so far
 
  - We're doing **Solitaire!** Hooray!
- - We're doing it in the terminal? (Probably?)
+ - We're doing it in the terminal.
+ - How the user is going to interact with the program (roughly).
 
 
 ## What we still need to figure out
 
- - What's the control scheme going to be like? How's the user going to
-   interact with the program?
  - What are the rules of Solitaire, exactly?
  - What's our schedule going forward?
 
