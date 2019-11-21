@@ -55,17 +55,17 @@ class GamePrinter
     
     // Print out the foundations in their own box on the top.
     
-    String thirteenLeadingSpaces = "             ";
+    String fourteenSpaces = "              ";
     
     String foundationsString =
-        thirteenLeadingSpaces + "  C     D     S     H  \n"
-        + thirteenLeadingSpaces + stringOfFoundations(foundations) + "\n";
+        "║" + fourteenSpaces + "  C     D     S     H  " + fourteenSpaces + "║\n"
+        + "║" + fourteenSpaces + stringOfFoundations(foundations) + fourteenSpaces + "║\n";
     
-    everything.append("═══════════════════════════════════════════════════\n");
+    everything.append("╔═══════════════════════════════════════════════════╗\n");
     
     everything.append(foundationsString);
     
-    everything.append("══════╦════════════════════════════════════════════\n");
+    everything.append("╠═══════╦═══════════════════════════════════════════╣\n");
     
     // Put the stock and waste on the left, and the tableaus on the right.
     
@@ -119,12 +119,16 @@ class GamePrinter
     for (int i = 0; i < leftLines.length; i++)
     {
       everything
+          .append("║ ")
           .append(leftLines[i])
           .append(" ║ ")
           .append(rightLines[i])
+          .append(" ║")
           .append("\n");
     }
-    
+  
+    everything.append("╚═══════╩═══════════════════════════════════════════╝\n");
+  
     return everything.toString();
   }
   
