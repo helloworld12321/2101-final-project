@@ -128,7 +128,7 @@ public class SolitaireGame
       case WASTE:
         if(endPile.equals(Move.PileType.TABLEAU))
           wasteToTableau(endID);
-        //TODO Make and implement moving cards from waste to foundation
+        //TODO Make and implement moving cards from waste to foundation, waste to stock
         break;
       case FOUNDATION:
       //TODO Make and implement moving cards from foundation to tableaus
@@ -430,18 +430,21 @@ public class SolitaireGame
    * @throws IllegalMoveException If both the stock and the waste are empty.
    */
   private void wastePileDraw() throws IllegalMoveException{
-      if (!stock.isEmpty()) {
-        if(!waste.isEmpty())
-          waste.getFirst().setShowing(false);
-        waste.addFirst(stock.poll());
-        waste.getFirst().setShowing(true);
+    if (stock.isEmpty() && waste.isEmpty()) {
+      throw new IllegalMoveException(
+          "There are no cards left to draw from the waste or stock");
+    }
+  
+    if (stock.isEmpty()) {
+      while(!waste.isEmpty()) {
+        waste.getLast().setShowing(false);
+        stock.add(waste.removeLast());
       }
-      else if (stock.isEmpty()){
-        while(!waste.isEmpty())
-          stock.add(waste.removeLast());
-      }
-      else if (stock.isEmpty() && waste.isEmpty())
-        throw new IllegalMoveException("There are no cards left to draw from the waste or stock");
+    }
+    else {
+      waste.addFirst(stock.poll());
+      waste.getFirst().setShowing(true);
+    }
   }
   
   /**
@@ -478,7 +481,7 @@ public class SolitaireGame
     if((waste.peek().getRank() == requiredRank) && ((waste.peek().getColor() == requiredColor)||(requiredColor == 2)))
       end.add(waste.pop());
     else
-      throw new IllegalMoveException("The waste card cannot be added to the tableau"); 
+      throw new IllegalMoveException("The waste card cannot be added to the tableau");
   }
   
   /**
