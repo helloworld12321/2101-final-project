@@ -5,14 +5,14 @@
  *   It can be either face up (visible) or face down (not visible).
  * </p>
  */
-public class Card
+class Card
 {
-  private int rank; 
-  private Suit suit;
+  private final int rank;
+  private final Suit suit;
   private boolean showing = false;
   private boolean onTop = false;
 
-  public Card(int r, Suit s){
+  Card(int r, Suit s){
     this.rank = r;
     this.suit = s;
   }
@@ -73,7 +73,7 @@ public class Card
     }
     else
     {
-      //I think it would be good to use something that is 
+      //I think it would be good to use something that is
       //two characters just like the regular cards, such as -- or ??
       return "??";
     }
