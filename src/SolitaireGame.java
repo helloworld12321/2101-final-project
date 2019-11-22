@@ -1,6 +1,8 @@
 import java.util.*;
 import java.util.concurrent.*;
 
+import javax.lang.model.util.ElementScanner6;
+
 
 /**
  * This class is in charge of running the game of solitaire.
@@ -128,7 +130,10 @@ public class SolitaireGame
       case WASTE:
         if(endPile.equals(Move.PileType.TABLEAU))
           wasteToTableau(endID);
-        //TODO Make and implement moving cards from waste to foundation
+        else if(endPile.equals(Move.PileType.FOUNDATION))
+          wasteToFoundation(endID);
+        else
+          throw new IllegalMoveException("Can't move from the waste to that pile");
         break;
       case FOUNDATION:
       //TODO Make and implement moving cards from foundation to tableaus
@@ -480,6 +485,44 @@ public class SolitaireGame
     else
       throw new IllegalMoveException("The waste card cannot be added to the tableau"); 
   }
+
+  /**
+   * Moves a card from the waste to the foundation with the given index
+   * @param foundationIndex the index of the foundation the card's being moved to
+   * @throws IllegalMoveException if the waste is empty or if the wrong foundation is given
+   */
+  private void wasteToFoundation(int foundationIndex) throws IllegalMoveException
+  {
+    Suit foundationSuit = findFoundationSuit(foundationIndex);
+    Stack<Card> foundation = getFoundation(foundationIndex);
+
+    if(waste.isEmpty())
+      throw new IllegalMoveException("Can't move cards from an empty waste");
+
+    //Get the rank that the next card on the foundation should be
+    int requiredRank;
+    //Note: if the foundation is empty, looking for an ace
+    if(!foundation.isEmpty())
+      requiredRank = foundation.peek().getRank() + 1;
+    else
+      requiredRank = 1;
+
+    //Get the top card of the tableau
+    Card topCard = waste.peek();
+
+    boolean satisfiesRank = topCard.getRank() == requiredRank;
+    boolean satisfiesSuit = topCard.getSuit().equals(foundationSuit);
+
+    if(satisfiesRank && satisfiesSuit)
+    {
+      topCard = waste.pop();
+      foundation.add(topCard);
+    }
+    else
+    {
+      throw new IllegalMoveException("That card can't be added to this foundation");
+    }
+  }
   
   /**
    * Move one card from tableau number {@code tableauIndex} to foundation
@@ -493,29 +536,12 @@ public class SolitaireGame
    */
   public void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
   {
-    Suit foundationSuit = null;
+    Suit foundationSuit = findFoundationSuit(foundationIndex);
     Stack<Card> foundation = getFoundation(foundationIndex);
     Stack<Card> tableau = getTableau(tableauIndex);
 
     if(tableau.isEmpty())
       throw new IllegalMoveException("Can't move anything from an empty tableau");
-
-    //Figure out the suit of the foundation
-    switch(foundationIndex)
-    {
-      case 0:
-        foundationSuit = Suit.CLUBS;
-        break;
-      case 1:
-        foundationSuit = Suit.DIAMONDS;
-        break;
-      case 2:
-        foundationSuit = Suit.SPADES;
-        break;
-      case 3:
-        foundationSuit = Suit.HEARTS;
-        break;
-    }
 
     //Get the rank that the next card on the foundation should be
     int requiredRank;
@@ -543,6 +569,35 @@ public class SolitaireGame
 
     //If the top card isn't showing, show it
     revealTopOfTableau(tableauIndex);
+  }
+
+  /**
+   * Get the suit of the foundation with the given index
+   * @param foundationIndex index of the foundation whose suit you want to find
+   * @return the suit of the foundation
+   */
+  private Suit findFoundationSuit(int foundationIndex)
+  {
+    Suit foundationSuit = null;
+
+    //Figure out the suit of the foundation
+    switch(foundationIndex)
+    {
+      case 0:
+        foundationSuit = Suit.CLUBS;
+        break;
+      case 1:
+        foundationSuit = Suit.DIAMONDS;
+        break;
+      case 2:
+        foundationSuit = Suit.SPADES;
+        break;
+      case 3:
+        foundationSuit = Suit.HEARTS;
+        break;
+    }
+
+    return foundationSuit;
   }
   
   /**
