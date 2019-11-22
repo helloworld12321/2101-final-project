@@ -9,7 +9,7 @@ public enum Suit
   /**
    * The symbol representing this suit (a unicode character).
    */
-  private char symbol;
+  private final char symbol;
 
   Suit(char symbol)
   {

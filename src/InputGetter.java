@@ -146,9 +146,9 @@ class InputGetter
    */
   private static class PileTypeAndID
   {
-    private Move.PileType pileType;
+    private final Move.PileType pileType;
     
-    private int pileID;
+    private final int pileID;
   
     /**
      * Create a new object storing a pile type and a pile ID.

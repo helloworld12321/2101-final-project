@@ -2,9 +2,9 @@
  * This exception is thrown to indicate that someone is trying to make
  * a move that's against the rules.
  */
-public class IllegalMoveException extends Exception
+class IllegalMoveException extends Exception
 {
-  public IllegalMoveException(String message)
+  IllegalMoveException(String message)
   {
     super(message);
   }

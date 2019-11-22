@@ -10,13 +10,14 @@ import java.util.concurrent.*;
  *   game. The {@code Client} will talk to it.
  * </p>
  */
-public class SolitaireGame
+@SuppressWarnings("CanBeFinal")
+class SolitaireGame
 {
 
-  ArrayList<Stack<Card>> tableaus;
-  ArrayList<Stack<Card>> foundations;
-  Queue<Card> stock;
-  Deque<Card> waste;
+  private ArrayList<Stack<Card>> tableaus;
+  private ArrayList<Stack<Card>> foundations;
+  private Queue<Card> stock;
+  private Deque<Card> waste;
   
   /**
    * Create a new solitaire game.
@@ -26,31 +27,14 @@ public class SolitaireGame
    *   piles; the game should be ready to start immediately.
    * </p>
    */
-  public SolitaireGame()
+  SolitaireGame()
   {
     //ArrayList to hold all our cards and shuffle them
     ArrayList<Card> allCards = new ArrayList<>();
 
     //Create the cards and fill the array list
-    for(int i = 0; i < 4; i++)
+    for(Suit currentSuit : Suit.values())
     {
-      Suit currentSuit = null;
-      switch(i)
-      {
-        case 0:
-          currentSuit = Suit.CLUBS;
-          break;
-        case 1:
-          currentSuit = Suit.SPADES;
-          break;
-        case 2:
-          currentSuit = Suit.DIAMONDS;
-          break;
-        case 3:
-          currentSuit = Suit.HEARTS;
-          break;
-      }
-
       for(int j = 0; j < 13; j++)
       {
         int currentRank = j + 1;
@@ -390,22 +374,19 @@ public class SolitaireGame
   private Card getEndOfStack(Stack<Card> tableau, int requiredColor, int requiredRank) throws IllegalMoveException
   {
     //Iterate through every card, stopping at the first one that satisfies our required rank and color
-    Card currentCard;
     Card stoppingCard = null;
-    for(int i = 0; i < tableau.size(); i++)
+    for (Card currentCard : tableau)
     {
-      currentCard = tableau.get(i);
-
       boolean satisfiesColor = requiredColor == currentCard.getColor();
       boolean satisfiesRank = requiredRank == currentCard.getRank();
       boolean faceUp = currentCard.isShowing();
-
-      if(satisfiesColor && satisfiesRank && faceUp)
+    
+      if (satisfiesColor && satisfiesRank && faceUp)
       {
         stoppingCard = currentCard;
         break;
       }
-      else if(satisfiesRank && faceUp && requiredColor == 2)
+      else if (satisfiesRank && faceUp && requiredColor == 2)
       {
         stoppingCard = currentCard;
         break;
@@ -458,30 +439,35 @@ public class SolitaireGame
    */
   private void wasteToTableau(int endTableau) throws IllegalMoveException
   {
-
+  
     //Get the tableau
     Stack<Card> end = getTableau(endTableau);
-
+  
     //Set to null in case the destination is empty
     Card endTopCard = null;
-
+  
     //If it's not empty, get the top card
-    if(!end.isEmpty())
+    if (!end.isEmpty())
       endTopCard = end.peek();
-
+  
     //Find the color and rank that the next card should be
     int requiredColor = getTableauNextColor(endTopCard);
     int requiredRank = getTableauNextRank(endTopCard);
-
+  
     //If waste is empty, move is illegal
-    if(waste.isEmpty())
+    if (waste.isEmpty()) {
       throw new IllegalMoveException("Can't move cards from an empty waste");
+    }
 
     //If the card is the correct one adds it to the tableau
-    if((waste.peek().getRank() == requiredRank) && ((waste.peek().getColor() == requiredColor)||(requiredColor == 2)))
+    else if (
+         waste.getFirst().getRank() == requiredRank
+         && (waste.getFirst().getColor() == requiredColor || requiredColor == 2)) {
       end.add(waste.pop());
-    else
+    }
+    else {
       throw new IllegalMoveException("The waste card cannot be added to the tableau");
+    }
   }
   
   /**
@@ -494,7 +480,7 @@ public class SolitaireGame
    *   doesn't fit on top of the desitination foundation. (Ie, its rank or
    *   its color isn't right.)
    */
-  public void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
+  private void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
   {
     Suit foundationSuit = null;
     Stack<Card> foundation = getFoundation(foundationIndex);
