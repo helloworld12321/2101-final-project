@@ -77,7 +77,7 @@ class GamePrinter
     String stringOfWaste =
         waste.isEmpty() ?
             " --- " :
-            String.format("[%3s]", waste.element());
+            String.format("[%3s]", waste.getFirst());
     
     String[] leftLines = {
         "  8  ",
