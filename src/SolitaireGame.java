@@ -1,6 +1,5 @@
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.*;
 
 /**
  * This class is in charge of running the game of solitaire.
@@ -17,6 +16,15 @@ public class SolitaireGame
   ArrayList<Stack<Card>> foundations;
   Queue<Card> stock;
   Deque<Card> waste;
+  
+  /**
+   * Create a new solitaire game.
+   *
+   * <p>
+   *   This constructor sets up all the cards and puts them into the right
+   *   piles; the game should be ready to start immediately.
+   * </p>
+   */
   public SolitaireGame()
   {
     //ArrayList to hold all our cards and shuffle them
@@ -89,6 +97,7 @@ public class SolitaireGame
     foundations = new ArrayList<>();
     for(int i = 0; i < 4; i++)
     {
+      //The foundations start out empty
       Stack<Card> currentFoundation = new Stack<>();
       foundations.add(currentFoundation);
     }
@@ -99,8 +108,14 @@ public class SolitaireGame
   }
 
   /**
-   * Get the tableau of the corresponding number
-   * @param number the number corresponding to the tableau you want to return, 
+   * Get the tableau of the corresponding number.
+   *
+   * <p>
+   *   For a discussion of solitaire terminology, see
+   *   <a href="https://cardgames.io/solitaire/#rules">here</a>.
+   * </p>
+   *
+   * @param number the number corresponding to the tableau you want to return.
    *  Note: goes from 0 to 6 not 1 to 7
    * @return the tableau as a stack of cards
    */
@@ -108,17 +123,58 @@ public class SolitaireGame
   {
     return tableaus.get(number);
   }
-
+  
+  /**
+   * Returns the stock (ie, the pile you draw from).
+   *
+   * <p>
+   *   The front of the queue is the top of the stock.
+   * </p>
+   *
+   * <p>
+   *   For a discussion of solitaire terminology, see
+   *   <a href="https://cardgames.io/solitaire/#rules">here</a>.
+   * </p>
+   *
+   * @return The stock.
+   */
   Queue<Card> getStock()
   {
     return stock;
   }
-
+  
+  /**
+   * Returns the waste.
+   *
+   * <p>
+   *   The front of the deque is the top of the waste.
+   * </p>
+   *
+   * <p>
+   *   For a discussion of solitaire terminology, see
+   *   <a href="https://cardgames.io/solitaire/#rules">here</a>.
+   * </p>
+   *
+   * @return the waste.
+   */
   Deque<Card> getWaste()
   {
     return waste;
   }
-
+  
+  /**
+   * Gets the foundation of the corresponding number.
+   *
+   * <p>
+   *   For a discussion of solitaire terminology, see
+   *   <a href="https://cardgames.io/solitaire/#rules">here</a>.
+   * </p>
+   *
+   * @param number the number corresponding to the tableau you want to return.
+   *  Note: goes from 0 to 3, not 1 to 4.
+   *
+   * @return The foundation, as a stack of cards.
+   */
   Stack<Card> getFoundation(int number)
   {
     return foundations.get(number);
@@ -197,9 +253,13 @@ public class SolitaireGame
   }
 
   /**
-   * Get the rank that the next card on the tableau should be given its top card
-   * @param topCard the current top card of the tableau, null means tableau is empty
-   * @return the rank
+   * Get the rank that the next card on the tableau should be given its top
+   * card.
+   * @param topCard the current top card of the tableau, null means tableau is
+   *   empty.
+   * @return the rank.
+   * @throws IllegalMoveException If no card could possibly be placed on this
+   *   tableau.
    */
   private int getTableauNextRank(Card topCard) throws IllegalMoveException
   {
@@ -217,7 +277,87 @@ public class SolitaireGame
 
     return nextRank;
   }
-
+  
+  /**
+   * When moving multiple cards from one tableau to another, return which
+   * card is the first card to move (ie, the bottom card to move).
+   *
+   * <p>
+   *   This card, and every card above it, will be transferred to the new
+   *   tableau.
+   * </p>
+   *
+   * <hr>
+   *
+   * <p>
+   *   An example will make things clearer. Suppose we have two tableaus,
+   *   tableau zero and tableau one:
+   * </p>
+   *
+   * <pre>
+   *     0     1
+   *   [ Q♠] [ ??]
+   *   [ J♡] [ ??]
+   *   [10♣] [ 9♡]
+   *   [ 9♢] [ 8♠]
+   *   [ 8♣] [ 7♡]
+   *         [ 6♣]
+   *         [ 5♢]
+   * </pre>
+   *
+   * <p>
+   *   (Here, some of the cards in tableau zero are face-down.)
+   * </p>
+   *
+   * <p>
+   *   Now, suppose we want to move cards from tableau one to tableau
+   *   zero. Tableau zero needs a red seven next, so we would call
+   *   {@code getEndOfStack(tableaus.get(1), 1, 7)}. (If tableau zero
+   *   needed a <em>black</em> seven, we would call
+   *   {@code getEndOfStack(tableaus.get(1), 0, 7)} instead.)
+   * </p>
+   *
+   * <p>
+   *   Now, this call will return the first (most bottom) card in tableau one
+   *   that may be placed on tableau zero. In this case, that card is the
+   *   seven of hearts, {@code 7♡}.
+   * </p>
+   *
+   * <p>
+   *   Note that this method will never return one of the face-down cards,
+   *   even if one of them happens to be a red seven. It's never legal to
+   *   move a face-down card onto another tableau.
+   * </p>
+   *
+   * <p>
+   *   After the seven of hearts is returned, the caller knows to move
+   *   the seven of hearts, and all cards above it, onto tableau zero.
+   *   (So, the caller would want to do this:)
+   * </p>
+   *
+   * <pre>
+   *     0     1
+   *   [ Q♠] [ ??]
+   *   [ J♡] [ ??]
+   *   [10♣] [ 9♡]
+   *   [ 9♢] [ 8♠]
+   *   [ 8♣]
+   *   [ 7♡]
+   *   [ 6♣]
+   *   [ 5♢]
+   * </pre>
+   *
+   * <hr>
+   *
+   * @param tableau The tableau that we want to move cards from.
+   * @param requiredColor The destination tableau needs this color next.
+   *   (0 means black; 1 means red; 2 means either.)
+   * @param requiredRank The destination tableau needs this rank next.
+   * @return The first (ie, the most bottom) card in {@code tableau} that may
+   *   legally be placed on the destination tableau.
+   * @throws IllegalMoveException If no card in {@code tableau} may be legally
+   *   be placed on the destination tableau.
+   */
   private Card getEndOfStack(Stack<Card> tableau, int requiredColor, int requiredRank) throws IllegalMoveException
   {
     //Iterate through every card, stopping at the first one that satisfies our required rank and color
@@ -249,7 +389,17 @@ public class SolitaireGame
 
     return stoppingCard;
   }
-
+  
+  /**
+   * Move one card from the front stock to the front of the waste.
+   *
+   * <p>
+   *   If the waste is empty, this method puts all of the cards from the
+   *   back of the waste into the back of the stock.
+   * </p>
+   *
+   * @throws IllegalMoveException If both the stock and the waste are empty.
+   */
   private void wastePileDraw() throws IllegalMoveException{
       if (!stock.isEmpty()) {
         waste.add(stock.poll());
@@ -262,7 +412,16 @@ public class SolitaireGame
       else if (stock.isEmpty() && waste.isEmpty())
         throw new IllegalMoveException("There are no cards left to draw from the waste or stock");
   }
-
+  
+  /**
+   * Move one card from the front of the waste to the top of a tableau.
+   *
+   * @param endTableau The tableau that we're moving the card to.
+   *
+   * @throws IllegalMoveException If the card on top of the waste doesn't
+   *   match the bottom of the tableau. (Ie, its rank or its color isn't
+   *   right.)
+   */
   private void wasteToTableau(int endTableau) throws IllegalMoveException
   {
 
@@ -290,8 +449,17 @@ public class SolitaireGame
     else
       throw new IllegalMoveException("The waste card cannot be added to the tableau");
   }
-
-
+  
+  /**
+   * Move one card from tableau number {@code tableauIndex} to foundation
+   * number {@code foundationIndex}.
+   *
+   * @param tableauIndex The number of the start tableau.
+   * @param foundationIndex The number of the destination foundation.
+   * @throws IllegalMoveException If the card on top of the start tableau
+   *   doesn't fit on top of the desitination foundation. (Ie, its rank or
+   *   its color isn't right.)
+   */
   public void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
   {
     Suit foundationSuit = null;
@@ -323,7 +491,7 @@ public class SolitaireGame
     //Note: if the foundation is empty, looking for an ace
     if(!foundation.isEmpty())
       requiredRank = foundation.peek().getRank() + 1;
-    else 
+    else
       requiredRank = 1;
 
     //Get the top card of the tableau
@@ -345,7 +513,13 @@ public class SolitaireGame
     //If the top card isn't showing, show it
     revealTopOfTableau(tableauIndex);
   }
-
+  
+  /**
+   * Show the top card of tableau number {@code tableauIndex}. (Flip it
+   * face-up.)
+   *
+   * @param tableauIndex The number of the tableau to show the top card of.
+   */
   private void revealTopOfTableau(int tableauIndex)
   {
     Stack<Card> tableau = getTableau(tableauIndex);

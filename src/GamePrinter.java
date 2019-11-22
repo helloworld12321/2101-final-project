@@ -30,7 +30,7 @@ class GamePrinter
    *
    * <p>
    *   For more information on Solitaire terminology, see
-   *   https://cardgames.io/solitaire/#rules
+   *   <a href="https://cardgames.io/solitaire/#rules">here</a>
    * </p>
    *
    * @param foundations A {@code List} of the foundations (of which there
