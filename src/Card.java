@@ -73,9 +73,9 @@ class Card
     }
     else
     {
-      //I think it would be good to use something that is
-      //two characters just like the regular cards, such as -- or ??
-      return "??";
+      // I got some feedback from my parents, who say that question marks look
+      // a little 'busy' on the screen. How about rectangles?
+      return "▓▓▓";
     }
   }
   

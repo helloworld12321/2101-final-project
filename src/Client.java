@@ -38,7 +38,7 @@ public class Client
         }
         catch (IllegalMoveException e)
         {
-          System.out.printf("That move isn't legal: %s\n", e.getMessage());
+          System.out.printf("\tThat move isn't legal: %s\n", e.getMessage());
           System.out.println("Please enter another move.");
           continue;
         }

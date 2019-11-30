@@ -202,7 +202,7 @@ class GamePrinter
   private static String stringOfTableaus(List<Stack<Card>> tableaus)
   {
     // (IntelliJ would prefer that I write "tableaux", but French is hard so
-    // I'm pluralizing it the Englishy way instead.)
+    // I'm pluralizing it the anglophone way instead.)
     
     // Clone all of the tableaus before reversing them
     @SuppressWarnings("unchecked")

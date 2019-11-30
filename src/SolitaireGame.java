@@ -54,7 +54,7 @@ class SolitaireGame
       //Create the tableau
       Stack<Card> currentTableau = new Stack<>();
 
-      //Fill the tableau with cards from the shuffled arraylist
+      //Fill the tableau with cards from the shuffled ArrayList
       for(int j = 0; j <= i; j++)
       {
         int lastIndex = allCards.size() - 1;
@@ -232,10 +232,10 @@ class SolitaireGame
         break;
       case STOCK:
         throw new IllegalMoveException(
-            "Can't move from a tableau to the stock.");
+            "Can't move from a tableau to the stock");
       case WASTE:
         throw new IllegalMoveException(
-            "Can't move from a tableau to the waste.");
+            "Can't move from a tableau to the waste");
     }
   }
   
@@ -259,10 +259,10 @@ class SolitaireGame
         break;
       case TABLEAU:
         throw new IllegalMoveException(
-            "Can't move from the stock to a tableau.");
+            "Can't move from the stock to a tableau");
       case FOUNDATION:
         throw new IllegalMoveException(
-            "Can't move from the stock to a foundation.");
+            "Can't move from the stock to a foundation");
     }
   }
   
@@ -355,7 +355,7 @@ class SolitaireGame
 
     //If the starting stack is empty, move is illegal
     if(start.isEmpty())
-      throw new IllegalMoveException("Can't move cards from an empty Tableau");
+      throw new IllegalMoveException("Can't move cards from an empty tableau");
 
     //Get the first card that meets both requirements in the starting tableau
     Card stoppingCard = getEndOfStack(start, requiredColor, requiredRank);
@@ -423,7 +423,7 @@ class SolitaireGame
     int nextRank;
 
     if(rank == 1)
-      throw new IllegalMoveException("Can't move to Tableau with Ace on top");
+      throw new IllegalMoveException("Can't move to tableau with Ace on top");
     else
       nextRank = rank - 1;
 
@@ -534,7 +534,7 @@ class SolitaireGame
 
     //If we didn't find a satisfactory card in the first tableau, move is illegal
     if(stoppingCard == null)
-      throw new IllegalMoveException("No viable cards found in first tableau");
+      throw new IllegalMoveException("No viable cards found in the starting tableau");
 
     return stoppingCard;
   }
