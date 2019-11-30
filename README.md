@@ -6,7 +6,7 @@ Group 5's final project for CSCI 2101: Data Structures, at UMN Morris 2019
 
  - We're doing **Solitaire!** Hooray!
  - We're doing it in the terminal.
- - How the user is going to interact with the program (roughly).
+ - We know ow the user is going to interact with the program (roughly).
 
 
 ## What we still need to figure out
@@ -16,7 +16,7 @@ Group 5's final project for CSCI 2101: Data Structures, at UMN Morris 2019
 
 ------------
 
-Yay! ♥️♠️♦️♣️
+♥️♠️♦️♣️
 
 (For the record, I vote we don't do it graphically—that would be super hard.
 
