@@ -128,9 +128,4 @@ class Move
   {
     return destinationID;
   }
-  
-  enum PileType
-  {
-    TABLEAU, FOUNDATION, STOCK, WASTE
-  }
 }

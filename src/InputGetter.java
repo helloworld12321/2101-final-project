@@ -56,7 +56,7 @@ class InputGetter
     Scanner sc = new Scanner(System.in);
 
     // Repeat until they give us a good input.
-    Move.PileType pileType = null;
+    PileType pileType = null;
     Integer pileID = null;
     //noinspection ConstantConditions
     do
@@ -76,17 +76,17 @@ class InputGetter
         int intInput = Integer.parseInt(input);
         if (1 <= intInput && intInput <= 7)
         {
-          pileType = Move.PileType.TABLEAU;
+          pileType = PileType.TABLEAU;
           pileID = intInput - 1;
         }
         else if (intInput == 8)
         {
-          pileType = Move.PileType.STOCK;
+          pileType = PileType.STOCK;
           pileID = 0;
         }
         else if (intInput == 9)
         {
-          pileType = Move.PileType.WASTE;
+          pileType = PileType.WASTE;
           pileID = 0;
         }
         else
@@ -101,22 +101,22 @@ class InputGetter
         switch (input.toUpperCase())
         {
           case "C":
-            pileType = Move.PileType.FOUNDATION;
+            pileType = PileType.FOUNDATION;
             pileID = 0;
             break;
         
           case "D":
-            pileType = Move.PileType.FOUNDATION;
+            pileType = PileType.FOUNDATION;
             pileID = 1;
             break;
         
           case "S":
-            pileType = Move.PileType.FOUNDATION;
+            pileType = PileType.FOUNDATION;
             pileID = 2;
             break;
         
           case "H":
-            pileType = Move.PileType.FOUNDATION;
+            pileType = PileType.FOUNDATION;
             pileID = 3;
             break;
         
@@ -146,7 +146,7 @@ class InputGetter
    */
   private static class PileTypeAndID
   {
-    private final Move.PileType pileType;
+    private final PileType pileType;
     
     private final int pileID;
   
@@ -156,7 +156,7 @@ class InputGetter
      * @param pileType The pile type to store.
      * @param pileID The pile ID to store.
      */
-    private PileTypeAndID(Move.PileType pileType, int pileID)
+    private PileTypeAndID(PileType pileType, int pileID)
     {
       this.pileType = pileType;
       this.pileID = pileID;
@@ -167,7 +167,7 @@ class InputGetter
      *
      * @return The pile type of this pile.
      */
-    Move.PileType getPileType()
+    PileType getPileType()
     {
       return pileType;
     }

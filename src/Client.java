@@ -23,8 +23,9 @@ public class Client
     {
       printGameState();
       System.out.println("Please enter a move.");
-      boolean haveTheyEnteredALegalMove;
-      do
+      
+      // Keep prompting for user input until they enter something legit.
+      while (true)
       {
         Move move = InputGetter.askForMove();
         try
@@ -33,15 +34,15 @@ public class Client
 
           // If we reach this line, makeMove didn't throw,
           // and the move the user entered was legal.
-          haveTheyEnteredALegalMove = true;
+          break;
         }
         catch (IllegalMoveException e)
         {
-          haveTheyEnteredALegalMove = false;
           System.out.printf("That move isn't legal: %s\n", e.getMessage());
           System.out.println("Please enter another move.");
+          continue;
         }
-      } while (!haveTheyEnteredALegalMove);
+      }
     }
   }
 

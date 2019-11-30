@@ -1,8 +1,6 @@
 import java.util.*;
 import java.util.concurrent.*;
 
-import javax.lang.model.util.ElementScanner6;
-
 
 /**
  * This class is in charge of running the game of solitaire.
@@ -89,42 +87,8 @@ class SolitaireGame
       foundations.add(currentFoundation);
     }
   }
-
-  void makeMove(Move move) throws IllegalMoveException
-  {
-
-    Move.PileType startPile = move.getStartType();
-    Move.PileType endPile = move.getDestinationType();
-    int startID = move.getStartID();
-    int endID = move.getDestinationID();
-
-    switch(startPile)
-    {
-      case TABLEAU:
-        if(endPile.equals(Move.PileType.FOUNDATION))
-          tableauToFoundation(startID, endID);
-        else if(endPile.equals(Move.PileType.TABLEAU))
-          tableauToTableau(startID, endID);
-        else
-          throw new IllegalMoveException("Can't move from a tableau to that pile");
-        break;
-      case STOCK:
-        wastePileDraw();
-        break;
-      case WASTE:
-        if(endPile.equals(Move.PileType.TABLEAU))
-          wasteToTableau(endID);
-        else if(endPile.equals(Move.PileType.FOUNDATION))
-          wasteToFoundation(endID);
-        else
-          throw new IllegalMoveException("Can't move from the waste to that pile");
-        break;
-      case FOUNDATION:
-      //TODO Make and implement moving cards from foundation to tableaus
-        break;
-    }
-  }
-
+  
+  
   /**
    * Get the tableau of the corresponding number.
    *
@@ -197,7 +161,177 @@ class SolitaireGame
   {
     return foundations.get(number);
   }
+  
+  
+  /**
+   * Given a move that the user wants to make, execute that move.
+   *
+   * <p>
+   *   (This usually involves moving cards around from one pile to another.)
+   * </p>
+   *
+   * <p>
+   *   This method mutates the {@code SolitaireGame} object.
+   * </p>
+   *
+   * @param move The move the user wants to make.
+   *
+   * @throws IllegalMoveException If the move in question is against the
+   *   rules. (The message carried by this exception should be suitable
+   *   to display to the user.)
+   */
+  void makeMove(Move move) throws IllegalMoveException
+  {
 
+    PileType startType = move.getStartType();
+    PileType endType = move.getDestinationType();
+    int startID = move.getStartID();
+    int endID = move.getDestinationID();
+
+    switch(startType)
+    {
+      case TABLEAU:
+        moveFromTableau(startID, endID, endType);
+        break;
+      case STOCK:
+        moveFromStock(endType);
+        break;
+      case WASTE:
+        moveFromWaste(endID, endType);
+        break;
+      case FOUNDATION:
+        moveFromFoundation(startID, endID, endType);
+        break;
+    }
+  }
+  
+  /**
+   * Method for moving cards from a tableau to any other pile type.
+   *
+   * @param startID The ID number of the tableau to move cards from. (As
+   *   described in the {@link Move} class.)
+   *
+   * @param endID The ID number of the pile to move cards to.
+   *
+   * @param endType The type of the pile to move cards to.
+   *
+   * @throws IllegalMoveException If the move in question is against the
+   *   rules. (The message carried by this exception should be suitable
+   *   to display to the user.)
+   */
+  private void moveFromTableau(int startID, int endID, PileType endType)
+      throws IllegalMoveException
+  {
+    switch (endType)
+    {
+      case FOUNDATION:
+        tableauToFoundation(startID, endID);
+        break;
+      case TABLEAU:
+        tableauToTableau(startID, endID);
+        break;
+      case STOCK:
+        throw new IllegalMoveException(
+            "Can't move from a tableau to the stock.");
+      case WASTE:
+        throw new IllegalMoveException(
+            "Can't move from a tableau to the waste.");
+    }
+  }
+  
+  /**
+   * Method for moving cards from the stock to any other pile type.
+   *
+   * @param endType The type of the pile to move cards to.
+   *
+   * @throws IllegalMoveException If the move in question is against the
+   *   rules. (The message carried by this exception should be suitable
+   *   to display to the user.)
+   */
+  private void moveFromStock(PileType endType)
+      throws IllegalMoveException
+  {
+    switch (endType)
+    {
+      case STOCK:
+      case WASTE:
+        wastePileDraw();
+        break;
+      case TABLEAU:
+        throw new IllegalMoveException(
+            "Can't move from the stock to a tableau.");
+      case FOUNDATION:
+        throw new IllegalMoveException(
+            "Can't move from the stock to a foundation.");
+    }
+  }
+  
+  /**
+   * Method for moving cards from the waste to any other pile type.
+   *
+   * @param endID The ID number of the pile to move cards to. (As
+   *   described in the {@link Move} class.)
+   *
+   * @param endType The type of the pile to move cards to.
+   *
+   * @throws IllegalMoveException If the move in question is against the
+   *   rules. (The message carried by this exception should be suitable
+   *   to display to the user.)
+   */
+  private void moveFromWaste(int endID, PileType endType)
+      throws IllegalMoveException
+  {
+    switch (endType)
+    {
+      case STOCK:
+      case WASTE:
+        wastePileDraw();
+        break;
+      case TABLEAU:
+        wasteToTableau(endID);
+        break;
+      case FOUNDATION:
+        wasteToFoundation(endID);
+        break;
+    }
+  }
+  
+  /**
+   * Method for moving cards from a foundation to any other pile type.
+   *
+   * @param startID The ID number of the foundation to move cards from. (As
+   *   described in the {@link Move} class.)
+   *
+   * @param endID The ID number of the pile to move cards to.
+   *
+   * @param endType The type of the pile to move cards to.
+   *
+   * @throws IllegalMoveException If the move in question is against the
+   *   rules. (The message carried by this exception should be suitable
+   *   to display to the user.)
+   */
+  private void moveFromFoundation(int startID, int endID, PileType endType)
+      throws IllegalMoveException
+  {
+    switch (endType)
+    {
+      case TABLEAU:
+        // TODO: Make and implement moving cards from foundations to tableaus.
+        // foundationToTableau(startID, endID);
+        break;
+      case FOUNDATION:
+        throw new IllegalMoveException(
+            "Can't move from one foundation to another.");
+      case STOCK:
+        throw new IllegalMoveException(
+            "Can't move from a foundation to the stock.");
+      case WASTE:
+        throw new IllegalMoveException(
+            "Can't move from a foundation to the waste.");
+    }
+  }
+  
+  
   /**
    * Method for moving cards from one tableau to the next
    * @param startTableau the tableau the stack of cards come from
@@ -405,6 +539,7 @@ class SolitaireGame
     return stoppingCard;
   }
   
+  
   /**
    * Move one card from the front stock to the front of the waste.
    *
@@ -513,6 +648,7 @@ class SolitaireGame
     }
   }
   
+  
   /**
    * Move one card from tableau number {@code tableauIndex} to foundation
    * number {@code foundationIndex}.
@@ -588,6 +724,7 @@ class SolitaireGame
 
     return foundationSuit;
   }
+  
   
   /**
    * Show the top card of tableau number {@code tableauIndex}. (Flip it
