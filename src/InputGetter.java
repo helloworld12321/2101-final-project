@@ -67,7 +67,7 @@ class InputGetter
     
       if (input.length() != 1)
       {
-        System.out.println("Please enter a single letter or number.");
+        System.out.println("\tPlease enter a single letter or number.");
         continue;
       }
     
@@ -92,7 +92,7 @@ class InputGetter
         else
         {
           System.out.printf(
-              "%d isn't a valid pile; please try again.\n",
+              "\t%d isn't a valid pile; please enter something else.\n",
               intInput);
         }
       }
@@ -122,7 +122,7 @@ class InputGetter
         
           default:
             System.out.printf(
-                "%s isn't a valid pile; please try again.\n",
+                "\t%s isn't a valid pile; please enter something else.\n",
                 input);
         }
       }
