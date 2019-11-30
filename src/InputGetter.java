@@ -30,8 +30,11 @@ class InputGetter
    * </p>
    *
    * @return The move that the user provided.
+   *
+   * @throws QuitTheGameException if the user types something indicating that
+   *   they want to end the game.
    */
-  static Move askForMove()
+  static Move askForMove() throws QuitTheGameException
   {
     PileTypeAndID start = askForPile("Starting pile: ");
     PileTypeAndID destination = askForPile("Destination pile: ");
@@ -50,20 +53,42 @@ class InputGetter
    *   printed after the prompt.)
    *
    * @return the pile type and ID of the pile the user entered.
+   *
+   * @throws QuitTheGameException  if the user types something indicating that
+   *   they want to end the game.
    */
   private static PileTypeAndID askForPile(String prompt)
+      throws QuitTheGameException
   {
     Scanner sc = new Scanner(System.in);
 
     // Repeat until they give us a good input.
     PileType pileType = null;
     Integer pileID = null;
-    //noinspection ConstantConditions
     do
     {
       // Prompt the user.
       System.out.print(prompt);
-      String input = sc.nextLine().trim();
+      String input;
+      try
+      {
+        input = sc.nextLine();
+      }
+      catch (NoSuchElementException e)
+      {
+        // We encountered an end-of-file.
+        // Just quit gracefully.
+        throw new QuitTheGameException();
+      }
+      
+      input = input.trim();
+      
+      // Let the user quit by typing "quit".
+      if (input.toUpperCase().equals("QUIT")
+          || input.toUpperCase().equals("Q"))
+      {
+        throw new QuitTheGameException();
+      }
     
       if (input.length() != 1)
       {

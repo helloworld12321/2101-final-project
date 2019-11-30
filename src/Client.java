@@ -27,7 +27,20 @@ public class Client
       // Keep prompting for user input until they enter something legit.
       while (true)
       {
-        Move move = InputGetter.askForMove();
+        Move move;
+        try
+        {
+          move = InputGetter.askForMove();
+        }
+        catch (QuitTheGameException e)
+        {
+          quit();
+          
+          // These lines should never be reached.
+          assert false;
+          return;
+        }
+
         try
         {
           game.makeMove(move);
@@ -44,6 +57,19 @@ public class Client
         }
       }
     }
+  }
+  
+  /**
+   * Quit the game and terminate the program.
+   *
+   * <p>
+   *   The program will terminate with exit code {@code 0}.
+   * </p>
+   */
+  static void quit()
+  {
+    System.out.println("Thanks for playing!");
+    System.exit(0);
   }
 
   /**
