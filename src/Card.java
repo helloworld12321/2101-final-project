@@ -16,14 +16,18 @@ class Card
     this.rank = r;
     this.suit = s;
   }
-
-  //Returns the rank of the card
+  
+  /**
+   *   Returns the rank of the card
+   */
   int getRank()
   {
     return rank;
   }
-
-  //Returns the suit of the card
+  
+  /**
+   * Returns the suit of the card
+   */
   Suit getSuit()
   {
     return suit;
@@ -40,30 +44,40 @@ class Card
     else
       return 1;
   }
-
-  //Returns if the card is flipped over or not
+  
+  /**
+   * Returns if the card is flipped over or not
+   */
   boolean isShowing()
   {
     return showing;
   }
 
-  //Returns if the card is on top of the stack or not
+  /**
+   * Returns if the card is on top of the stack or not
+   */
   boolean isTop(){
     return onTop;
   }
-
-  //Sets if the card is showing or not
+  
+  /**
+   * Sets if the card is showing or not
+   */
   void setShowing(boolean shouldShow)
   {
     showing = shouldShow;
   }
-
-  //Sets if the card is on top of the stack or not
+  
+  /**
+   * Sets if the card is on top of the stack or not
+   */
   void setTop(boolean top){
     onTop = top;
   }
-
-  //Converts a card to a string depending on if it is face up or not
+  
+  /**
+   * Converts a card to a string depending on if it is face up or not
+   */
   @Override
   public String toString()
   {
@@ -79,7 +93,9 @@ class Card
     }
   }
   
-  //Returns the string of the rank of the card
+  /**
+   * Returns the string of the rank of the card
+   */
   private String stringOfRank()
   {
     int rank = getRank();
