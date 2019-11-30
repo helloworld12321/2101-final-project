@@ -18,7 +18,7 @@ class Card
   }
   
   /**
-   *   Returns the rank of the card
+   * Returns the rank of the card
    */
   int getRank()
   {
