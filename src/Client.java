@@ -69,6 +69,9 @@ public class Client
     }
     
     Move move;
+    
+    // InputGetter will tell us whether the user entered a real move, or
+    // whether they want to quit.
     try
     {
       move = InputGetter.askForMove();
@@ -78,12 +81,12 @@ public class Client
       return MoveResult.QUIT;
     }
   
+    // SolitaireGame will tell us whether that move is legal or not.
+    // (and if possible, it'll execute the move.)
     try
     {
       game.makeMove(move);
-    
-      // If we reach this line, makeMove didn't throw,
-      // and the move the user entered was legal.
+      
       return MoveResult.LEGAL;
     }
     catch (IllegalMoveException e)
@@ -121,7 +124,7 @@ public class Client
   
     Deque<Card> waste = game.getWaste();
   
-    return GamePrinter.stringOfEverything(
+    return GameFormatter.stringOfEverything(
         foundations,
         tableaus,
         stock,

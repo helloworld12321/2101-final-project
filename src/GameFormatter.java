@@ -2,13 +2,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This class is in charge of printing out the state of the game.
+ * This class is in charge of stringifying out the state of the game.
  *
  * <p>
  *   It isn't meant to be instantiated; it just provides some static methods.
  * </p>
  */
-class GamePrinter
+class GameFormatter
 {
   /**
    * A mapping between the numbers of the foundation piles (0 through 3,

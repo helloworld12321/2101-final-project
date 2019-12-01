@@ -10,14 +10,13 @@ import java.util.concurrent.*;
  *   game. The {@code Client} will talk to it.
  * </p>
  */
-@SuppressWarnings("CanBeFinal")
 class SolitaireGame
 {
 
-  private ArrayList<Stack<Card>> tableaus;
-  private ArrayList<Stack<Card>> foundations;
-  private Queue<Card> stock;
-  private Deque<Card> waste;
+  private final ArrayList<Stack<Card>> tableaus;
+  private final ArrayList<Stack<Card>> foundations;
+  private final Queue<Card> stock;
+  private final Deque<Card> waste;
   
   /**
    * Create a new solitaire game.
