@@ -1,7 +1,6 @@
 import java.util.*;
 import java.util.concurrent.*;
 
-
 /**
  * This class is in charge of running the game of solitaire.
  *
@@ -10,14 +9,12 @@ import java.util.concurrent.*;
  *   game. The {@code Client} will talk to it.
  * </p>
  */
-@SuppressWarnings("CanBeFinal")
 class SolitaireGame
 {
-
-  private ArrayList<Stack<Card>> tableaus;
-  private ArrayList<Stack<Card>> foundations;
-  private Queue<Card> stock;
-  private Deque<Card> waste;
+  private final ArrayList<Stack<Card>> tableaus;
+  private final ArrayList<Stack<Card>> foundations;
+  private final Queue<Card> stock;
+  private final Deque<Card> waste;
   
   /**
    * Create a new solitaire game.
@@ -162,6 +159,22 @@ class SolitaireGame
     return foundations.get(number);
   }
   
+  /**
+   * Return whether the user has won the game yet.
+   *
+   * <p>
+   *   The user has won if and only if all of the cards on the tableaus
+   *   are turned face-up.
+   * </p>
+   *
+   * @return {@code true} if the user has won the game, and {@code false} if
+   *   not.
+   */
+  boolean hasWon()
+  {
+    return tableaus.stream().allMatch(
+        tableau -> tableau.stream().allMatch(Card::isShowing));
+  }
   
   /**
    * Given a move that the user wants to make, execute that move.

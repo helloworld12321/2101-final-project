@@ -11,7 +11,13 @@ class Card
   private final Suit suit;
   private boolean showing = false;
   private boolean onTop = false;
-
+  
+  /**
+   * Create a new card face-down.
+   *
+   * @param r the card's rank
+   * @param s the card's suit
+   */
   Card(int r, Suit s){
     this.rank = r;
     this.suit = s;
