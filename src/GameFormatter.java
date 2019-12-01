@@ -28,29 +28,30 @@ class GameFormatter
    * Returns a string showing the entire solitaire game--all the cards
    * in all the piles--as it will be displayed to the user.
    *
-   * <p>
-   *   For more information on Solitaire terminology, see
-   *   <a href="https://cardgames.io/solitaire/#rules">here</a>
-   * </p>
+   * @param game The solitaire game to stringify
    *
-   * @param foundations A {@code List} of the foundations (of which there
-   *   should be exactly 4.) This method will not mutate the foundations.
-   *
-   * @param tableaus A {@code List} of the tableaus (of which there
-   *   should be exactly 7.) This method will not mutate the tableaus.
-   *
-   * @param stock The stock of the solitaire game (that is, the pile
-   *   of face-down cards the user draws from).
-   *
-   * @param waste The waste of the solitaire game (that is, the cards that the
-   *   user has drawn from the stock.)
+   * @return a pretty, human-readable string showing the state of the game.
+   *   (This string will contain a trailing newline.)
    */
-  static String stringOfEverything(
-      List<Stack<Card>> foundations,
-      List<Stack<Card>> tableaus,
-      Queue<Card> stock,
-      Deque<Card> waste)
+  static String stringOfGame(SolitaireGame game)
   {
+    List<Stack<Card>> foundations = new ArrayList<>();
+    for (int i = 0; i < 4; i++)
+    {
+      foundations.add(game.getFoundation(i));
+    }
+  
+    List<Stack<Card>> tableaus = new ArrayList<>();
+    for (int i = 0; i < 7; i++)
+    {
+      tableaus.add(game.getTableau(i));
+    }
+  
+    Queue<Card> stock = game.getStock();
+  
+    Deque<Card> waste = game.getWaste();
+  
+  
     StringBuilder everything = new StringBuilder();
     
     // Print out the foundations in their own box on the top.

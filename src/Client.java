@@ -23,10 +23,14 @@ public class Client
     {
       previousMoveResult = makeMove(previousMoveResult);
     }
+  
+    if (game.hasWon())
+    {
+      System.out.println(GameFormatter.stringOfGame(game));
+      System.out.println();
+      System.out.println("You win!");
+    }
     
-    System.out.println(stringOfGame());
-    System.out.println();
-    System.out.println("You win!");
     System.out.println("Thanks for playing!");
   }
   
@@ -63,7 +67,7 @@ public class Client
   {
     if (previousMoveResult == MoveResult.LEGAL)
     {
-      System.out.println(stringOfGame());
+      System.out.println(GameFormatter.stringOfGame(game));
       System.out.println();
       System.out.println("Please enter a move.");
     }
@@ -98,40 +102,5 @@ public class Client
       System.out.printf("\tThat move isn't legal: %s\n", e.getMessage());
       return MoveResult.ILLEGAL;
     }
-  }
-  
-  /**
-   * Returns a string representing the state of the game.
-   *
-   * <p>
-   *   The returned string shows all of the cards on the table in a pretty,
-   *   human-readable format.
-   * </p>
-   *
-   * @return a string representing the state of the game.
-   */
-  private static String stringOfGame()
-  {
-    List<Stack<Card>> foundations = new ArrayList<>();
-    for (int i = 0; i < 4; i++)
-    {
-      foundations.add(game.getFoundation(i));
-    }
-  
-    List<Stack<Card>> tableaus = new ArrayList<>();
-    for (int i = 0; i < 7; i++)
-    {
-      tableaus.add(game.getTableau(i));
-    }
-  
-    Queue<Card> stock = game.getStock();
-  
-    Deque<Card> waste = game.getWaste();
-  
-    return GameFormatter.stringOfEverything(
-        foundations,
-        tableaus,
-        stock,
-        waste);
   }
 }
