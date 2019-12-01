@@ -18,11 +18,15 @@ public class Client
     game = new SolitaireGame();
     
     MoveResult previousMoveResult = MoveResult.LEGAL;
-    // TODO: Add check for is-the-game-finished.
-    while (previousMoveResult != MoveResult.QUIT)
+    while (!game.hasWon()
+           && previousMoveResult != MoveResult.QUIT)
     {
       previousMoveResult = makeMove(previousMoveResult);
     }
+    
+    System.out.println(stringOfGame());
+    System.out.println();
+    System.out.println("You win!");
     System.out.println("Thanks for playing!");
   }
   
