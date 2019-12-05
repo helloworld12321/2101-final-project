@@ -8,7 +8,7 @@ import java.util.*;
  *   logic--that's {@code SolitaireGame}'s job.
  * </p>
  */
-public class Client
+public class TextClient
 {
   private static SolitaireGame game;
   

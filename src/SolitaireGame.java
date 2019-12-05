@@ -6,7 +6,7 @@ import java.util.concurrent.*;
  *
  * <p>
  *   It contains the gameplay logic and information about the state of the
- *   game. The {@code Client} will talk to it.
+ *   game. The {@code TextClient} will talk to it.
  * </p>
  */
 class SolitaireGame
