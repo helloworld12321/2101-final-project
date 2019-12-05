@@ -15,7 +15,7 @@ class GameFormatter
    * inclusive) and the suit that corresponds to those piles.
    */
   private static final Map<Integer, Suit> suitsOfFoundations;
-  
+
   static {
     suitsOfFoundations = new HashMap<>();
     suitsOfFoundations.put(0, Suit.CLUBS);
@@ -23,7 +23,7 @@ class GameFormatter
     suitsOfFoundations.put(2, Suit.SPADES);
     suitsOfFoundations.put(3, Suit.HEARTS);
   }
-  
+
   /**
    * Returns a string showing the entire solitaire game--all the cards
    * in all the piles--as it will be displayed to the user.
@@ -40,62 +40,62 @@ class GameFormatter
     {
       foundations.add(game.getFoundation(i));
     }
-  
+
     List<Stack<Card>> tableaus = new ArrayList<>();
     for (int i = 0; i < 7; i++)
     {
       tableaus.add(game.getTableau(i));
     }
-  
+
     Queue<Card> stock = game.getStock();
-  
+
     Deque<Card> waste = game.getWaste();
-  
-  
+
+
     StringBuilder everything = new StringBuilder();
-    
+
     // Print out the foundations in their own box on the top.
-    
+
     String fourteenSpaces = "              ";
-    
+
     String foundationsString =
         "║" + fourteenSpaces + "  C     D     S     H  " + fourteenSpaces + "║\n"
         + "║" + fourteenSpaces + stringOfFoundations(foundations) + fourteenSpaces + "║\n";
-    
+
     everything.append("╔═══════════════════════════════════════════════════╗\n");
-    
+
     everything.append(foundationsString);
-    
+
     everything.append("╠═══════╦═══════════════════════════════════════════╣\n");
-    
+
     // Put the stock and waste on the left, and the tableaus on the right.
-    
+
     String stringOfStock =
         stock.isEmpty() ?
             " --- " :
             String.format("[%3s]", stock.element());
-    
+
     String stringOfWaste =
         waste.isEmpty() ?
             " --- " :
             String.format("[%3s]", waste.getFirst());
-    
+
     String[] leftLines = {
         "  8  ",
         String.format("%5s", stringOfStock),
         "  9  ",
         String.format("%5s", stringOfWaste),
-        };
-    
+    };
+
     String tableausString = stringOfTableaus(tableaus);
-    
+
     String[] rightLines =
         ("  1     2     3     4     5     6     7  \n"
          + tableausString).split("\\n");
-    
+
     // Pad the lines on the left and the lines on the right, so that
     // there are the same number of lines in each.
-    
+
     if (leftLines.length < rightLines.length)
     {
       String[] newLeftLines = Arrays.copyOf(leftLines, rightLines.length);
@@ -116,7 +116,7 @@ class GameFormatter
       }
       rightLines = newRightLines;
     }
-    
+
     for (int i = 0; i < leftLines.length; i++)
     {
       everything
@@ -127,12 +127,12 @@ class GameFormatter
           .append(" ║")
           .append("\n");
     }
-  
+
     everything.append("╚═══════╩═══════════════════════════════════════════╝\n");
-  
+
     return everything.toString();
   }
-  
+
   /**
    * Returns a String showing all the foundation piles (as they will be
    * displayed to the user).
@@ -169,7 +169,7 @@ class GameFormatter
     }
     return String.join(" ", cardStrings);
   }
-  
+
   /**
    * Returns a String showing all the tableau piles (as they will be
    * displayed to the user).
@@ -204,7 +204,7 @@ class GameFormatter
   {
     // (IntelliJ would prefer that I write "tableaux", but French is hard so
     // I'm pluralizing it the anglophone way instead.)
-    
+
     // Clone all of the tableaus before reversing them
     @SuppressWarnings("unchecked")
     List<Stack<Card>> reversedTableaus =
@@ -215,11 +215,11 @@ class GameFormatter
             // to be safe at runtime; it should never fail.)
             .map(object -> (Stack<Card>)object)
             .collect(Collectors.toList());
-    
+
     // We'll want to iterate through the tableaus from the back to the
     // front. (So that the top items get displayed last.)
     reversedTableaus.forEach(Collections::reverse);
-    
+
     List<String> linesOfOutput = new ArrayList<>();
     while (!reversedTableaus.stream().allMatch(Stack::empty))
     {

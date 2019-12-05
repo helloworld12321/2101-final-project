@@ -11,7 +11,7 @@ class Card
   private final Suit suit;
   private boolean showing = false;
   private boolean onTop = false;
-  
+
   /**
    * Create a new card face-down.
    *
@@ -22,7 +22,7 @@ class Card
     this.rank = r;
     this.suit = s;
   }
-  
+
   /**
    * Returns the rank of the card
    */
@@ -30,7 +30,7 @@ class Card
   {
     return rank;
   }
-  
+
   /**
    * Returns the suit of the card
    */
@@ -50,7 +50,7 @@ class Card
     else
       return 1;
   }
-  
+
   /**
    * Returns if the card is flipped over or not
    */
@@ -65,7 +65,7 @@ class Card
   boolean isTop(){
     return onTop;
   }
-  
+
   /**
    * Sets if the card is showing or not
    */
@@ -73,14 +73,14 @@ class Card
   {
     showing = shouldShow;
   }
-  
+
   /**
    * Sets if the card is on top of the stack or not
    */
   void setTop(boolean top){
     onTop = top;
   }
-  
+
   /**
    * Converts a card to a string depending on if it is face up or not
    */
@@ -98,7 +98,7 @@ class Card
       return "▓▓▓";
     }
   }
-  
+
   /**
    * Returns the string of the rank of the card
    */

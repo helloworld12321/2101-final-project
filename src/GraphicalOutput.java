@@ -26,7 +26,7 @@ public class GraphicalOutput extends JFrame{
         gamePanel.setSize(screenWidth, screenWidth);
         getContentPane().add(gamePanel);
     }
-    
+
     public static void main(String[] args){
         new GraphicalOutput();
     }

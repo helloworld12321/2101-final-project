@@ -84,8 +84,8 @@ class SolitaireGame
       foundations.add(currentFoundation);
     }
   }
-  
-  
+
+
   /**
    * Get the tableau of the corresponding number.
    *
@@ -102,7 +102,7 @@ class SolitaireGame
   {
     return tableaus.get(number);
   }
-  
+
   /**
    * Returns the stock (ie, the pile you draw from).
    *
@@ -121,7 +121,7 @@ class SolitaireGame
   {
     return stock;
   }
-  
+
   /**
    * Returns the waste.
    *
@@ -140,7 +140,7 @@ class SolitaireGame
   {
     return waste;
   }
-  
+
   /**
    * Gets the foundation of the corresponding number.
    *
@@ -158,7 +158,7 @@ class SolitaireGame
   {
     return foundations.get(number);
   }
-  
+
   /**
    * Return whether the user has won the game yet.
    *
@@ -175,7 +175,7 @@ class SolitaireGame
     return tableaus.stream().allMatch(
         tableau -> tableau.stream().allMatch(Card::isShowing));
   }
-  
+
   /**
    * Given a move that the user wants to make, execute that move.
    *
@@ -217,7 +217,7 @@ class SolitaireGame
         break;
     }
   }
-  
+
   /**
    * Method for moving cards from a tableau to any other pile type.
    *
@@ -251,7 +251,7 @@ class SolitaireGame
             "Can't move from a tableau to the waste");
     }
   }
-  
+
   /**
    * Method for moving cards from the stock to any other pile type.
    *
@@ -278,7 +278,7 @@ class SolitaireGame
             "Can't move from the stock to a foundation");
     }
   }
-  
+
   /**
    * Method for moving cards from the waste to any other pile type.
    *
@@ -308,7 +308,7 @@ class SolitaireGame
         break;
     }
   }
-  
+
   /**
    * Method for moving cards from a foundation to any other pile type.
    *
@@ -342,8 +342,8 @@ class SolitaireGame
             "Can't move from a foundation to the waste.");
     }
   }
-  
-  
+
+
   /**
    * Method for moving cards from one tableau to the next
    * @param startTableau the tableau the stack of cards come from
@@ -441,7 +441,7 @@ class SolitaireGame
 
     return nextRank;
   }
-  
+
   /**
    * When moving multiple cards from one tableau to another, return which
    * card is the first card to move (ie, the bottom card to move).
@@ -531,7 +531,7 @@ class SolitaireGame
       boolean satisfiesColor = requiredColor == currentCard.getColor();
       boolean satisfiesRank = requiredRank == currentCard.getRank();
       boolean faceUp = currentCard.isShowing();
-    
+
       if (satisfiesColor && satisfiesRank && faceUp)
       {
         stoppingCard = currentCard;
@@ -550,8 +550,8 @@ class SolitaireGame
 
     return stoppingCard;
   }
-  
-  
+
+
   /**
    * Move one card from the front stock to the front of the waste.
    *
@@ -567,7 +567,7 @@ class SolitaireGame
       throw new IllegalMoveException(
           "There are no cards left to draw from the waste or stock");
     }
-  
+
     if (stock.isEmpty()) {
       while(!waste.isEmpty()) {
         waste.getLast().setShowing(false);
@@ -579,7 +579,7 @@ class SolitaireGame
       waste.getFirst().setShowing(true);
     }
   }
-  
+
   /**
    * Move one card from the front of the waste to the top of a tableau.
    *
@@ -591,21 +591,21 @@ class SolitaireGame
    */
   private void wasteToTableau(int endTableau) throws IllegalMoveException
   {
-  
+
     //Get the tableau
     Stack<Card> end = getTableau(endTableau);
-  
+
     //Set to null in case the destination is empty
     Card endTopCard = null;
-  
+
     //If it's not empty, get the top card
     if (!end.isEmpty())
       endTopCard = end.peek();
-  
+
     //Find the color and rank that the next card should be
     int requiredColor = getTableauNextColor(endTopCard);
     int requiredRank = getTableauNextRank(endTopCard);
-  
+
     //If waste is empty, move is illegal
     if (waste.isEmpty()) {
       throw new IllegalMoveException("Can't move cards from an empty waste");
@@ -659,8 +659,8 @@ class SolitaireGame
       throw new IllegalMoveException("That card can't be added to this foundation");
     }
   }
-  
-  
+
+
   /**
    * Move one card from tableau number {@code tableauIndex} to foundation
    * number {@code foundationIndex}.
@@ -707,7 +707,7 @@ class SolitaireGame
     //If the top card isn't showing, show it
     revealTopOfTableau(tableauIndex);
   }
-  
+
   /**
    * Move one card from foundation number {@code foundationIndex} to tableau
    * number {@code tableauIndex}.
@@ -738,7 +738,7 @@ class SolitaireGame
       tableauTop = null;
 
     int requiredColor = getTableauNextColor(tableauTop);
-    
+
     //Check whether the color and rank of the top card are what we're looking for on the tableau
     boolean satisfiesRank = getTableauNextRank(tableauTop) == foundationTop.getRank();
     boolean satisfiesColor = requiredColor == foundationTop.getColor() || requiredColor == 2;
@@ -781,8 +781,8 @@ class SolitaireGame
 
     return foundationSuit;
   }
-  
-  
+
+
   /**
    * Show the top card of tableau number {@code tableauIndex}. (Flip it
    * face-up.)

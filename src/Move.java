@@ -45,7 +45,7 @@ class Move
   private final int startID;
   private final PileType destinationType;
   private final int destinationID;
-  
+
   /**
    * Construct a new {@code Move} object.
    *
@@ -68,7 +68,7 @@ class Move
     this.destinationType = destinationType;
     this.destinationID = destinationID;
   }
-  
+
   /**
    * Returns the type of pile that we're moving cards from.
    *
@@ -78,7 +78,7 @@ class Move
   {
     return startType;
   }
-  
+
   /**
    * Returns a number that identifies the start pile.
    *
@@ -98,7 +98,7 @@ class Move
   {
     return startID;
   }
-  
+
   /**
    * Returns the type of pile that we're moving cards to.
    *
@@ -108,7 +108,7 @@ class Move
   {
     return destinationType;
   }
-  
+
   /**
    * Returns a number that identifies the destination pile.
    *

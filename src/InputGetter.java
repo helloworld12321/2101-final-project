@@ -45,7 +45,7 @@ class InputGetter
         destination.getPileType(),
         destination.getPileID());
   }
-  
+
   /**
    * Asks the user to input one pile over the standard input.
    *
@@ -80,22 +80,22 @@ class InputGetter
         // Just quit gracefully.
         throw new QuitTheGameException();
       }
-      
+
       input = input.trim();
-      
+
       // Let the user quit by typing "quit".
       if (input.toUpperCase().equals("QUIT")
           || input.toUpperCase().equals("Q"))
       {
         throw new QuitTheGameException();
       }
-    
+
       if (input.length() != 1)
       {
         System.out.println("\tPlease enter a single letter or number.");
         continue;
       }
-    
+
       if (input.matches("\\d"))
       {
         int intInput = Integer.parseInt(input);
@@ -129,22 +129,22 @@ class InputGetter
             pileType = PileType.FOUNDATION;
             pileID = 0;
             break;
-        
+
           case "D":
             pileType = PileType.FOUNDATION;
             pileID = 1;
             break;
-        
+
           case "S":
             pileType = PileType.FOUNDATION;
             pileID = 2;
             break;
-        
+
           case "H":
             pileType = PileType.FOUNDATION;
             pileID = 3;
             break;
-        
+
           default:
             System.out.printf(
                 "\t%s isn't a valid pile; please enter something else.\n",
@@ -152,7 +152,7 @@ class InputGetter
         }
       }
     } while (pileType == null || pileID == null);
-    
+
     return new PileTypeAndID(pileType, pileID);
   }
 
@@ -172,9 +172,9 @@ class InputGetter
   private static class PileTypeAndID
   {
     private final PileType pileType;
-    
+
     private final int pileID;
-  
+
     /**
      * Create a new object storing a pile type and a pile ID.
      *
@@ -186,7 +186,7 @@ class InputGetter
       this.pileType = pileType;
       this.pileID = pileID;
     }
-  
+
     /**
      * Return the pile type of this pile.
      *
@@ -196,7 +196,7 @@ class InputGetter
     {
       return pileType;
     }
-  
+
     /**
      * Return the pile ID of this pile.
      *
