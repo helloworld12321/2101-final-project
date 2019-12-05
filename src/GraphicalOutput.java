@@ -251,7 +251,7 @@ public class GraphicalOutput extends JFrame{
             g2d.setPaint(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
             g2d.draw(scard);
-            g.setFont(new Font("Verdana", Font.PLAIN, 50));
+            g.setFont(new Font("Verdana", Font.PLAIN, 36));
             g.drawString("⟳", 140, 650);
         }
         if(!s.getWaste().isEmpty()) {
