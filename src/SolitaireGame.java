@@ -329,8 +329,7 @@ class SolitaireGame
     switch (endType)
     {
       case TABLEAU:
-        // TODO: Make and implement moving cards from foundations to tableaus.
-        // foundationToTableau(startID, endID);
+        foundationToTableau(startID, endID);
         break;
       case FOUNDATION:
         throw new IllegalMoveException(
@@ -707,6 +706,42 @@ class SolitaireGame
 
     //If the top card isn't showing, show it
     revealTopOfTableau(tableauIndex);
+  }
+
+  //TODO: javadoc comment
+  private void foundationToTableau(int foundationIndex, int tableauIndex) throws IllegalMoveException
+  {
+    //Get the appropriate foundation and tableau
+    Stack<Card> foundation = getFoundation(foundationIndex);
+    Stack<Card> tableau = getTableau(tableauIndex);
+
+    //Make sure the foundation is empty
+    if(foundation.isEmpty())
+      throw new IllegalMoveException("Can't move from an empty foundation");
+
+    //Get the top cards of both the foundation and the waste
+    Card tableauTop;
+    Card foundationTop = foundation.peek();
+
+    if(!tableau.isEmpty())
+      tableauTop = tableau.peek();
+    else
+      tableauTop = null;
+
+    int requiredColor = getTableauNextColor(tableauTop);
+    
+    //Check whether the color and rank of the top card are what we're looking for on the tableau
+    boolean satisfiesRank = getTableauNextRank(tableauTop) == foundationTop.getRank();
+    boolean satisfiesColor = requiredColor == foundationTop.getColor() || requiredColor == 2;
+
+    //If the card is correct move it, if not throw an exception
+    if(satisfiesRank && satisfiesColor)
+    {
+      Card movingCard = foundation.pop();
+      tableau.add(movingCard);
+    }
+    else
+      throw new IllegalMoveException("Can't move card from that foundation to that tableau");
   }
 
   /**
