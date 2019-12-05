@@ -47,7 +47,7 @@ public class GraphicalOutput extends JFrame{
                             //Moving from top of tableau to tableau
                             if((topCards.indexOf(t) != firstCard) && (firstCard < 7) && (topCards.indexOf(t) < 7)){
                                 try {
-                                    s.makeMove(new Move(Move.PileType.TABLEAU, firstCard, Move.PileType.TABLEAU, topCards.indexOf(t)));
+                                    s.makeMove(new Move(PileType.TABLEAU, firstCard, PileType.TABLEAU, topCards.indexOf(t)));
                                 } catch (IllegalMoveException ex) {
                                     ex.printStackTrace();
                                 }
@@ -60,7 +60,7 @@ public class GraphicalOutput extends JFrame{
                                 //Moving from waste to tableau
                                 if(topCards.indexOf(t) < 7) {
                                     try {
-                                        s.makeMove(new Move(Move.PileType.WASTE, 0, Move.PileType.TABLEAU, topCards.indexOf(t)));
+                                        s.makeMove(new Move(PileType.WASTE, 0, PileType.TABLEAU, topCards.indexOf(t)));
                                     } catch (IllegalMoveException ex) {
                                         ex.printStackTrace();
                                     }
@@ -68,7 +68,7 @@ public class GraphicalOutput extends JFrame{
                                 //Moving from waste to foundation
                                 else if((topCards.indexOf(t) > 6) && (topCards.indexOf(t) < 11)){
                                     try {
-                                        s.makeMove(new Move(Move.PileType.WASTE, 0, Move.PileType.FOUNDATION, topCards.indexOf(t) - 7));
+                                        s.makeMove(new Move(PileType.WASTE, 0, PileType.FOUNDATION, topCards.indexOf(t) - 7));
                                     } catch (IllegalMoveException ex) {
                                         ex.printStackTrace();
                                     }
@@ -80,7 +80,7 @@ public class GraphicalOutput extends JFrame{
                             //Moving from tableau to foundation
                             else if((topCards.indexOf(t) > 6) && (topCards.indexOf(t) < 11)){
                                 try {
-                                    s.makeMove(new Move(Move.PileType.TABLEAU, firstCard, Move.PileType.FOUNDATION, topCards.indexOf(t) - 7));
+                                    s.makeMove(new Move(PileType.TABLEAU, firstCard, PileType.FOUNDATION, topCards.indexOf(t) - 7));
                                 } catch (IllegalMoveException ex) {
                                     ex.printStackTrace();
                                 }
@@ -91,7 +91,7 @@ public class GraphicalOutput extends JFrame{
                             //Moving from foundation to tableau
                             else if((topCards.indexOf(t) < 7) && (6 < firstCard) && (firstCard < 11)){
                                 try {
-                                    s.makeMove(new Move(Move.PileType.FOUNDATION, firstCard, Move.PileType.TABLEAU, topCards.indexOf(t) - 7));
+                                    s.makeMove(new Move(PileType.FOUNDATION, firstCard, PileType.TABLEAU, topCards.indexOf(t) - 7));
                                 } catch (IllegalMoveException ex) {
                                     ex.printStackTrace();
                                 }
@@ -109,7 +109,7 @@ public class GraphicalOutput extends JFrame{
                         //Checks if the card clicked is the stock card
                         else if((t.contains(e.getPoint())) && (topCards.indexOf(t) == 11)){
                             try {
-                                s.makeMove(new Move(Move.PileType.STOCK, 0, Move.PileType.WASTE, 0));
+                                s.makeMove(new Move(PileType.STOCK, 0, PileType.WASTE, 0));
                             } catch (IllegalMoveException ex) {
                                 ex.printStackTrace();
                             }
