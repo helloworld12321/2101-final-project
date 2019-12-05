@@ -14,7 +14,7 @@ public class GraphicalOutput extends JFrame{
 
     public GraphicalOutput(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) (screenSize.getHeight() * .9);
+        int screenWidth = 777;
         setSize(new Dimension(screenWidth, screenWidth));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Solitaire");
@@ -178,7 +178,7 @@ public class GraphicalOutput extends JFrame{
         g2d.setPaint(Color.BLACK);
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(card);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
         if(!s.getTableau(x).get(y).isShowing())
             g2d.setPaint(Color.GRAY);
@@ -211,7 +211,7 @@ public class GraphicalOutput extends JFrame{
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(card);
         if(s.getFoundation(x).isEmpty()) {
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 50));
             switch(x){
                 case 0:
                     g2d.setPaint(Color.BLACK);
@@ -232,7 +232,7 @@ public class GraphicalOutput extends JFrame{
             }
         }
         else{
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
             if(s.getFoundation(x).peek().getColor() == 0)
                 g2d.setPaint(Color.BLACK);
             else
@@ -262,7 +262,7 @@ public class GraphicalOutput extends JFrame{
             g2d.setPaint(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
             g2d.draw(scard);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 50));
             g.drawString("⟳", 140, 650);
         }
         if(!s.getWaste().isEmpty()) {
@@ -272,7 +272,7 @@ public class GraphicalOutput extends JFrame{
             g2d.setPaint(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
             g2d.draw(ccard);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
             if(s.getWaste().peek().getColor() == 1)
                 g2d.setPaint(Color.RED);
             g.drawString(s.getWaste().peek().toString(), 225, 620);
@@ -289,7 +289,7 @@ public class GraphicalOutput extends JFrame{
     private void congrats(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setPaint(Color.YELLOW);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 80));
         g.drawString("YOU WIN!", 200, 380);
     }
 }
