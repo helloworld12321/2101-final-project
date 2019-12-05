@@ -668,7 +668,7 @@ class SolitaireGame
    * @param tableauIndex The number of the start tableau.
    * @param foundationIndex The number of the destination foundation.
    * @throws IllegalMoveException If the card on top of the start tableau
-   *   doesn't fit on top of the desitination foundation. (Ie, its rank or
+   *   doesn't fit on top of the destination foundation. (Ie, its rank or
    *   its color isn't right.)
    */
   private void tableauToFoundation(int tableauIndex, int foundationIndex) throws IllegalMoveException
@@ -707,8 +707,17 @@ class SolitaireGame
     //If the top card isn't showing, show it
     revealTopOfTableau(tableauIndex);
   }
-
-  //TODO: javadoc comment
+  
+  /**
+   * Move one card from foundation number {@code foundationIndex} to tableau
+   * number {@code tableauIndex}.
+   *
+   * @param foundationIndex The number of the start foundation.
+   * @param tableauIndex The number of the destination tableau.
+   * @throws IllegalMoveException If the card on top of the start foundation
+   *   doesn't fit on top of the destination tableau. (Ie, its rank or
+   *   its color isn't right.)
+   */
   private void foundationToTableau(int foundationIndex, int tableauIndex) throws IllegalMoveException
   {
     //Get the appropriate foundation and tableau
