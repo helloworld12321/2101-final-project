@@ -11,10 +11,6 @@ public class GraphicalOutput extends JFrame{
     private ArrayList<Shape> topCards = new ArrayList<>();
     private int firstCard;
     private boolean firstCardClicked = false;
-    
-    public static void main(String[] args) {
-        new GraphicalOutput();
-    }
 
     public GraphicalOutput(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -30,6 +26,10 @@ public class GraphicalOutput extends JFrame{
         gamePanel.setSize(screenWidth, screenWidth);
         getContentPane().add(gamePanel);
     }
+    
+    public static void main(String[] args){
+        new GraphicalOutput();
+    }
 
     private class MainPanel extends JPanel{
 
@@ -39,8 +39,16 @@ public class GraphicalOutput extends JFrame{
                     super.mouseClicked(e);
                     //Checks if the shape clicked is one of the clickable shapes
                     for(Shape t : topCards){
-                        //Checks if the card clicked is the first one and in a tableau
-                        if((t.contains(e.getPoint())) && (!firstCardClicked) && (topCards.indexOf(t) != 11)){
+                        //Checks if the card clicked is the first one and in a tableau or the stock
+                        if((t.contains(e.getPoint())) && (!firstCardClicked) && ((topCards.indexOf(t) < 7) || (topCards.indexOf(t) == 12))){
+                            firstCard = topCards.indexOf(t);
+                            firstCardClicked = true;
+                            topCards.clear();
+                            break;
+                        }
+                        //Checks if the card clicked is the first one and in a foundation
+                        else if((t.contains(e.getPoint())) && (!firstCardClicked) && (topCards.indexOf(t) > 6) && (topCards.indexOf(t) < 11)
+                                && (!s.getFoundation(topCards.indexOf(t) - 7).isEmpty())){
                             firstCard = topCards.indexOf(t);
                             firstCardClicked = true;
                             topCards.clear();
@@ -82,7 +90,7 @@ public class GraphicalOutput extends JFrame{
                                 break;
                             }
                             //Moving from tableau to foundation
-                            else if((topCards.indexOf(t) > 6) && (topCards.indexOf(t) < 11)){
+                            else if((topCards.indexOf(t) > 6) && (topCards.indexOf(t) < 11) && (firstCard < 7)){
                                 try {
                                     s.makeMove(new Move(PileType.TABLEAU, firstCard, PileType.FOUNDATION, topCards.indexOf(t) - 7));
                                 } catch (IllegalMoveException ex) {
@@ -93,9 +101,9 @@ public class GraphicalOutput extends JFrame{
                                 break;
                             }
                             //Moving from foundation to tableau
-                            else if((topCards.indexOf(t) < 7) && (6 < firstCard) && (firstCard < 11)){
+                            else if((topCards.indexOf(t) != firstCard) && (topCards.indexOf(t) < 7) && (6 < firstCard) && (firstCard < 11)){
                                 try {
-                                    s.makeMove(new Move(PileType.FOUNDATION, firstCard, PileType.TABLEAU, topCards.indexOf(t) - 7));
+                                    s.makeMove(new Move(PileType.FOUNDATION, firstCard - 7, PileType.TABLEAU, topCards.indexOf(t)));
                                 } catch (IllegalMoveException ex) {
                                     ex.printStackTrace();
                                 }
@@ -139,6 +147,9 @@ public class GraphicalOutput extends JFrame{
             if(firstCardClicked) {
                 cardClick(g);
             }
+            if(s.hasWon()){
+                congrats(g);
+            }
         }
     }
 
@@ -167,7 +178,7 @@ public class GraphicalOutput extends JFrame{
         g2d.setPaint(Color.BLACK);
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(card);
-        g.setFont(new Font("Verdana", Font.PLAIN, 20));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if(!s.getTableau(x).get(y).isShowing())
             g2d.setPaint(Color.GRAY);
@@ -200,7 +211,7 @@ public class GraphicalOutput extends JFrame{
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(card);
         if(s.getFoundation(x).isEmpty()) {
-            g.setFont(new Font("Verdana", Font.PLAIN, 36));
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             switch(x){
                 case 0:
                     g2d.setPaint(Color.BLACK);
@@ -221,7 +232,7 @@ public class GraphicalOutput extends JFrame{
             }
         }
         else{
-            g.setFont(new Font("Verdana", Font.PLAIN, 20));
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
             if(s.getFoundation(x).peek().getColor() == 0)
                 g2d.setPaint(Color.BLACK);
             else
@@ -251,7 +262,7 @@ public class GraphicalOutput extends JFrame{
             g2d.setPaint(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
             g2d.draw(scard);
-            g.setFont(new Font("Verdana", Font.PLAIN, 36));
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             g.drawString("⟳", 140, 650);
         }
         if(!s.getWaste().isEmpty()) {
@@ -261,7 +272,7 @@ public class GraphicalOutput extends JFrame{
             g2d.setPaint(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
             g2d.draw(ccard);
-            g.setFont(new Font("Verdana", Font.PLAIN, 20));
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
             if(s.getWaste().peek().getColor() == 1)
                 g2d.setPaint(Color.RED);
             g.drawString(s.getWaste().peek().toString(), 225, 620);
@@ -273,5 +284,12 @@ public class GraphicalOutput extends JFrame{
         g2d.setPaint(Color.YELLOW);
         g2d.setStroke(new BasicStroke(5));
         g2d.draw(topCards.get(firstCard));
+    }
+
+    private void congrats(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setPaint(Color.YELLOW);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+        g.drawString("YOU WIN!", 200, 380);
     }
 }
